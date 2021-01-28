@@ -5,12 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    d:DesignHeight="40"
-    d:DesignWidth="40"
+    xmlns:viewmodels="clr-namespace:CapApp.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:MainControlViewModel}"
+    d:DesignHeight="300"
+    d:DesignWidth="200"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <StackPanel Background="AliceBlue">
-        <TextBox />
+        <Button Command="{Binding AddCommand}" Content="ダミー画像" />
+        <Button Command="{Binding ClearCommand}" Content="クリア" />
         <TextBlock Text="hoge" />
     </StackPanel>
 </UserControl>

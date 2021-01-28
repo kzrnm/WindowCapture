@@ -8,8 +8,8 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:vm="clr-namespace:CapApp.ViewModels"
     xmlns:wc="https://github.com/naminodarie/WindowCapture"
-    Width="400"
-    Height="300"
+    Width="600"
+    Height="200"
     MinWidth="360"
     MinHeight="120"
     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
@@ -19,6 +19,7 @@
     dd:DragDrop.DropHandler="{Binding DropHandler}"
     dd:DragDrop.IsDropTarget="True"
     prism:ViewModelLocator.AutoWireViewModel="True"
+    Background="AliceBlue"
     mc:Ignorable="d">
 
     <wc:WindowCapturer

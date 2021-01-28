@@ -1,9 +1,11 @@
 ﻿using Prism;
 using Prism.Ioc;
+using Prism.Mvvm;
 using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Kzrnm.WindowCapture.Views
 {
@@ -14,41 +16,42 @@ namespace Kzrnm.WindowCapture.Views
             DefaultStyleKeyProperty.OverrideMetadata(typeof(WindowCapturer), new FrameworkPropertyMetadata(typeof(WindowCapturer)));
         }
 
-
-        private ContentControl? content;
-        public override void OnApplyTemplate()
+        public WindowCapturer()
         {
-            base.OnApplyTemplate();
-
-            if (this.content != null)
-            {
-                this.content.SizeChanged -= this.Content_SizeChanged;
-            }
-            this.content = this.GetTemplateChild("PART_Content") as ContentControl;
-            if (this.content != null)
-            {
-                this.content.SizeChanged += this.Content_SizeChanged;
-            }
+            ViewModelLocator.SetAutoWireViewModel(this, true);
+            SetBinding(AlwaysImageAreaProperty,
+                new Binding(nameof(ViewModels.WindowCapturerViewModel.AlwaysImageArea))
+                {
+                    Source = DataContext,
+                    Mode = BindingMode.OneWayToSource,
+                });
         }
-
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
             var window = Window.GetWindow(this);
-            window.Loaded += this.Window_Loaded;
+            window.Loaded += Window_Loaded;
             window.Closing += this.Window_Closing;
         }
 
-        private bool isWindowLoaded = false;
+
+        private ContentControl? MainContent;
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            if (MainContent != null) MainContent.SizeChanged -= this.Content_SizeChanged;
+            this.MainContent = this.GetTemplateChild("PART_MainContent") as ContentControl;
+            if (MainContent != null) MainContent.SizeChanged += this.Content_SizeChanged;
+        }
+
+        private bool isWindowLoaded = false;  
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ((Window)sender).Loaded -= this.Window_Loaded;
             isWindowLoaded = true;
-            if (HasPreviewWindow)
-            {
-                MakePreviewWindow();
-            }
+            if (HasPreviewWindow) MakePreviewWindow();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -95,11 +98,46 @@ namespace Kzrnm.WindowCapture.Views
                 nameof(AlwaysImageArea),
                 typeof(bool),
                 typeof(WindowCapturer),
-                new PropertyMetadata(true));
+                new PropertyMetadata(false));
         public bool AlwaysImageArea
         {
             get => (bool)GetValue(AlwaysImageAreaProperty);
             set => SetValue(AlwaysImageAreaProperty, value);
+        }
+
+        private ImagePreviewWindow? imagePreviewWindow;
+        public static readonly DependencyProperty HasPreviewWindowProperty =
+            DependencyProperty.Register(
+                nameof(HasPreviewWindow),
+                typeof(bool),
+                typeof(WindowCapturer),
+                new PropertyMetadata(true, (d, e) => ((WindowCapturer)d).OnHasPreviewWindowChanged((bool)e.NewValue)));
+        public bool HasPreviewWindow
+        {
+            get => (bool)GetValue(HasPreviewWindowProperty);
+            set => SetValue(HasPreviewWindowProperty, value);
+        }
+        private void OnHasPreviewWindowChanged(bool newValue)
+        {
+            if (newValue)
+            {
+                if (isWindowLoaded && imagePreviewWindow == null)
+                    MakePreviewWindow();
+            }
+            else if (imagePreviewWindow is { } ipw)
+            {
+                ipw.Owner = null;
+                ipw.Close();
+            }
+        }
+        private void MakePreviewWindow()
+        {
+            var app = (PrismApplicationBase)Application.Current;
+            var mainWindow = Window.GetWindow(this);
+            imagePreviewWindow = app.Container.Resolve<ImagePreviewWindow>();
+            imagePreviewWindow.Owner = mainWindow;
+            imagePreviewWindow.Top = mainWindow.Top + mainWindow.Height / 2;
+            imagePreviewWindow.Left = mainWindow.Left + mainWindow.Width / 2;
         }
 
         private Size expandSize;
@@ -122,49 +160,5 @@ namespace Kzrnm.WindowCapture.Views
             this.ExpandSizeChanged?.Invoke(this, new ExpandSizeChangedEventArgs(this.expandSize, nextSize));
             this.expandSize = nextSize;
         }
-
-
-        //private ImagePreviewWindow? imagePreviewWindow;
-        public static readonly DependencyProperty HasPreviewWindowProperty =
-            DependencyProperty.Register(
-                nameof(HasPreviewWindow),
-                typeof(bool),
-                typeof(WindowCapturer),
-                new PropertyMetadata(true, OnHasPreviewWindowChanged));
-        public bool HasPreviewWindow
-        {
-            get => (bool)GetValue(HasPreviewWindowProperty);
-            set => SetValue(HasPreviewWindowProperty, value);
-        }
-        private static void OnHasPreviewWindowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-            => ((WindowCapturer)d).OnHasPreviewWindowChanged((bool)e.NewValue);
-        private void OnHasPreviewWindowChanged(bool newValue)
-        {
-            if (newValue)
-            {
-                //    if (wc.isWindowLoaded && wc.imagePreviewWindow == null)
-                //        wc.MakePreviewWindow();
-            }
-            else
-            {
-                //    var ipw = wc.imagePreviewWindow;
-                //    if (ipw != null)
-                //    {
-                //        ipw.Owner = null;
-                //        ipw.Close();
-                //}
-            }
-        }
-        private void MakePreviewWindow()
-        {
-            //var app = (PrismApplicationBase)Application.Current;
-            //var mainWindow = Window.GetWindow(this);
-            //imagePreviewWindow = app.Container.Resolve<ImagePreviewWindow>();
-            //imagePreviewWindow.Owner = mainWindow;
-            //imagePreviewWindow.Top = mainWindow.Top + mainWindow.Height / 2;
-            //imagePreviewWindow.Left = mainWindow.Left + mainWindow.Width / 2;
-        }
-
-
     }
 }

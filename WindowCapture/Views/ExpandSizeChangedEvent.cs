@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Kzrnm.WindowCapture.Views
 {
-    public delegate void ExpandSizeChangedEventHandler(object sender, ExpandSizeChangedEventArgs e);
+    public delegate void ExpandSizeChangedEventHandler(object? sender, ExpandSizeChangedEventArgs e);
     public class ExpandSizeChangedEventArgs : EventArgs
     {
         public double WidthDiff { get; }

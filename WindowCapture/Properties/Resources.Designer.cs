@@ -22,24 +22,24 @@ namespace Kzrnm.WindowCapture.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource() {
+        internal Resources() {
         }
         
         /// <summary>
         ///   このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kzrnm.WindowCapture.Properties.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kzrnm.WindowCapture.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Kzrnm.WindowCapture.Properties {
         ///   現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   Clipboard に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string Clipboard {
+        public static string Clipboard {
             get {
                 return ResourceManager.GetString("Clipboard", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   クリップボードにコピー に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string CopyToClipboard {
+        public static string CopyToClipboard {
             get {
                 return ResourceManager.GetString("CopyToClipboard", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   削除 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string Delete {
+        public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   高さ に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string Height {
+        public static string Height {
             get {
                 return ResourceManager.GetString("Height", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   画像の種類 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string KindOfImage {
+        public static string KindOfImage {
             get {
                 return ResourceManager.GetString("KindOfImage", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   貼り付け に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string Paste {
+        public static string Paste {
             get {
                 return ResourceManager.GetString("Paste", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   px に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string px {
+        public static string px {
             get {
                 return ResourceManager.GetString("px", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   比率で指定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string SettingByPercentage {
+        public static string SettingByPercentage {
             get {
                 return ResourceManager.GetString("SettingByPercentage", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   ピクセル数で指定 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string SettingByPixel {
+        public static string SettingByPixel {
             get {
                 return ResourceManager.GetString("SettingByPixel", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   サイドカットモード に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string SideCutMode {
+        public static string SideCutMode {
             get {
                 return ResourceManager.GetString("SideCutMode", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Kzrnm.WindowCapture.Properties {
         /// <summary>
         ///   幅 に類似しているローカライズされた文字列を検索します。
         /// </summary>
-        internal static string Width {
+        public static string Width {
             get {
                 return ResourceManager.GetString("Width", resourceCulture);
             }

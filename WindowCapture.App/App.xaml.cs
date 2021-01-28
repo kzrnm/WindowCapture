@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using Prism.Modularity;
 using Kzrnm.WindowCapture;
+using Kzrnm.WindowCapture.Images;
 
 namespace CapApp
 {
@@ -19,7 +20,7 @@ namespace CapApp
         protected override Window CreateShell() => Container.Resolve<MainWindow>();
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            containerRegistry.RegisterSingleton<ImageProvider>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
