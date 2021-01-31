@@ -64,7 +64,8 @@ namespace Kzrnm.WindowCapture.Views
             DependencyProperty.Register(
                 nameof(ImageWidth),
                 typeof(double),
-                typeof(WindowCapturer));
+                typeof(WindowCapturer),
+                new PropertyMetadata(double.NaN));
         public double ImageWidth
         {
             get => (double)GetValue(ImageWidthProperty);

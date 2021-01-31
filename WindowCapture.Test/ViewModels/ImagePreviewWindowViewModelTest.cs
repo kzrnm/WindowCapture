@@ -27,6 +27,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         {
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(10, 10));
             var img = ImageProvider.Images[0];
+            img.ImageRatioSize.WidthPercentage = 200;
             var clipboardMock = new Mock<IClipboardManager>();
             var viewModel = new ImagePreviewWindowViewModel(EventAggregator, clipboardMock.Object, ImageProvider);
 

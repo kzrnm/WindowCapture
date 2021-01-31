@@ -121,28 +121,5 @@ namespace Kzrnm.WindowCapture.Images
         }
 
         public byte[] ToByteArray() => CanUseFileStream ? File.ReadAllBytes(this.SourcePath) : ToStreamImpl();
-        private static readonly Regex fileNamePattern
-            = new Regex(@"\.(bmp|jpe?g|png)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        public static bool IsImageFile(ReadOnlySpan<char> fileName)
-        {
-            var ext = Path.GetExtension(fileName);
-            if (ext.Length <= 1) return false;
-            ext = ext[1..];
-            return ext.Equals("jpeg", StringComparison.OrdinalIgnoreCase)
-                || ext.Equals("jpg", StringComparison.OrdinalIgnoreCase)
-                || ext.Equals("png", StringComparison.OrdinalIgnoreCase)
-                || ext.Equals("bmp", StringComparison.OrdinalIgnoreCase);
-        }
-        public static readonly Regex jpegPattern
-            = new Regex(@"\.jpe?g", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        public static bool IsJpegFile(ReadOnlySpan<char> fileName)
-        {
-            var ext = Path.GetExtension(fileName);
-            if (ext.Length <= 1) return false;
-            ext = ext[1..];
-            return
-                ext.Equals("jpg", StringComparison.OrdinalIgnoreCase)
-                || ext.Equals("jpeg", StringComparison.OrdinalIgnoreCase);
-        }
     }
 }

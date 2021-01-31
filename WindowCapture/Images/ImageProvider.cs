@@ -24,7 +24,7 @@ namespace Kzrnm.WindowCapture.Images
         protected readonly IEventAggregator eventAggregator;
 
         protected readonly SelectorObservableCollection<CaptureImage> _Images;
-        public ObservableCollection<CaptureImage> Images => this._Images;
+        public SelectorObservableCollection<CaptureImage> Images => this._Images;
 
         private int _SelectedImageIndex = -1;
         public int SelectedImageIndex

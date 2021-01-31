@@ -64,5 +64,12 @@ namespace Kzrnm.WindowCapture.Mvvm
             base.SetItem(index, item);
             SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public void RemoveSelectedItem()
+        {
+            var ix = SelectedIndex;
+            if ((uint)ix < (uint)Count)
+                this.RemoveAt(ix);
+        }
     }
 }
