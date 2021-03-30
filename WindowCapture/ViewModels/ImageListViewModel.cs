@@ -1,13 +1,13 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using Kzrnm.WindowCapture.Images;
 using Kzrnm.WindowCapture.Windows;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class ImageListViewModel : BindableBase
+    public class ImageListViewModel : ObservableObject
     {
         private readonly IEventAggregator eventAggregator;
         private readonly IClipboardManager clipboard;

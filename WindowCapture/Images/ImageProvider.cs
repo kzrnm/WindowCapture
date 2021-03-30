@@ -1,13 +1,11 @@
 ﻿using Kzrnm.WindowCapture.Mvvm;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Prism.Events;
-using Prism.Mvvm;
-using System;
-using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class ImageProvider : BindableBase
+    public class ImageProvider : ObservableObject
     {
         public ImageProvider(IEventAggregator ea) : this(ea, new SelectorObservableCollection<CaptureImage>()) { }
         protected ImageProvider(IEventAggregator ea, SelectorObservableCollection<CaptureImage> images)

@@ -1,14 +1,14 @@
 ﻿using Kzrnm.WindowCapture.Images;
 using Kzrnm.WindowCapture.Windows;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 using System;
 using System.Windows;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class ImagePreviewWindowViewModel : BindableBase
+    public class ImagePreviewWindowViewModel : ObservableObject
     {
         private readonly IEventAggregator eventAggregator;
         private readonly IClipboardManager clipboard;
@@ -50,7 +50,11 @@ namespace Kzrnm.WindowCapture.ViewModels
         public CaptureImage? SelectedImage
         {
             get => _SelectedImage;
-            set => SetProperty(ref _SelectedImage, value, () => Visibility = _SelectedImage is null ? Visibility.Collapsed : Visibility.Visible);
+            set
+            {
+                if (SetProperty(ref _SelectedImage, value))
+                    Visibility = _SelectedImage is null ? Visibility.Collapsed : Visibility.Visible;
+            }
         }
 
         private Visibility _Visibility = Visibility.Collapsed;

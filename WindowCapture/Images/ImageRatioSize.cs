@@ -1,9 +1,9 @@
-﻿using Prism.Mvvm;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System.Windows.Media.Imaging;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class ImageRatioSize : BindableBase
+    public class ImageRatioSize : ObservableObject
     {
         #region Constructors
         public ImageRatioSize(BitmapSource image)

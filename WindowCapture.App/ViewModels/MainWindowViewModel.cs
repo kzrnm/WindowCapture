@@ -1,10 +1,10 @@
 ﻿using GongSolutions.Wpf.DragDrop;
 using Kzrnm.WindowCapture.Images;
-using Prism.Mvvm;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace CapApp.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : ObservableObject
     {
         public MainWindowViewModel(ImageProvider imageProvider)
         {

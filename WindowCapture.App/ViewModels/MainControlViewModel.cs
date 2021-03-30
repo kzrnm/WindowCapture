@@ -1,15 +1,13 @@
 ﻿using Kzrnm.WindowCapture.Images;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Prism.Commands;
-using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace CapApp.ViewModels
 {
-    public class MainControlViewModel : BindableBase
+    public class MainControlViewModel : ObservableObject
     {
         public ImageProvider ImageProvider { get; }
 

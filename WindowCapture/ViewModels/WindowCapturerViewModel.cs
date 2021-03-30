@@ -1,12 +1,12 @@
 ﻿using Kzrnm.WindowCapture.Images;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Prism.Events;
-using Prism.Mvvm;
 using System;
 using System.Windows;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class WindowCapturerViewModel : BindableBase
+    public class WindowCapturerViewModel : ObservableObject
     {
         private readonly IEventAggregator eventAggregator;
         public ImageProvider ImageProvider { get; }
@@ -25,7 +25,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public bool AlwaysImageArea
         {
             get => _AlwaysImageArea;
-            set => SetProperty(ref _AlwaysImageArea, value, () => UpdateImageVisibility());
+            set { if (SetProperty(ref _AlwaysImageArea, value)) UpdateImageVisibility(); }
         }
 
         private Visibility _ImageVisibility = Visibility.Collapsed;

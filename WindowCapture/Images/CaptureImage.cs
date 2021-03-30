@@ -1,4 +1,4 @@
-﻿using Prism.Mvvm;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -9,21 +9,21 @@ using System.Windows.Media.Imaging;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class CaptureImage : BindableBase
+    public class CaptureImage : ObservableObject
     {
         public ImageRatioSize ImageRatioSize { get; }
 
         private ImageKind _ImageKind;
         public ImageKind ImageKind
         {
-            set => SetProperty(ref _ImageKind, value, UpdateTransformedImage);
+            set { if (SetProperty(ref _ImageKind, value)) UpdateTransformedImage(); }
             get => _ImageKind;
         }
 
         private bool _IsSideCutMode;
         public bool IsSideCutMode
         {
-            set => SetProperty(ref _IsSideCutMode, value, UpdateTransformedImage);
+            set { if (SetProperty(ref _IsSideCutMode, value)) UpdateTransformedImage(); }
             get => _IsSideCutMode;
         }
 

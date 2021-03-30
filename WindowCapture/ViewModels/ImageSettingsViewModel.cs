@@ -1,12 +1,12 @@
 ﻿using Kzrnm.WindowCapture.Images;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Prism.Events;
-using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class ImageSettingsViewModel : BindableBase
+    public class ImageSettingsViewModel : ObservableObject
     {
         public static IReadOnlyCollection<ImageKind> ImageKinds { get; }
         static ImageSettingsViewModel()
@@ -45,8 +45,8 @@ namespace Kzrnm.WindowCapture.ViewModels
                     && this.SelectedImage.ImageRatioSize.Height != value)
                 {
                     this.SelectedImage.ImageRatioSize.Height = value;
-                    this.RaisePropertyChanged(nameof(Height));
-                    this.RaisePropertyChanged(nameof(HeightPercentage));
+                    this.OnPropertyChanged(nameof(Height));
+                    this.OnPropertyChanged(nameof(HeightPercentage));
                 }
             }
             get => this.SelectedImage?.ImageRatioSize.Height ?? 0;
@@ -59,8 +59,8 @@ namespace Kzrnm.WindowCapture.ViewModels
                     && this.SelectedImage.ImageRatioSize.Width != value)
                 {
                     this.SelectedImage.ImageRatioSize.Width = value;
-                    this.RaisePropertyChanged(nameof(Width));
-                    this.RaisePropertyChanged(nameof(WidthPercentage));
+                    this.OnPropertyChanged(nameof(Width));
+                    this.OnPropertyChanged(nameof(WidthPercentage));
                 }
             }
             get => this.SelectedImage?.ImageRatioSize.Width ?? 0;
@@ -85,14 +85,14 @@ namespace Kzrnm.WindowCapture.ViewModels
                 if (imageRatioSize.HeightPercentage != value)
                 {
                     imageRatioSize.HeightPercentage = value;
-                    this.RaisePropertyChanged(nameof(Height));
-                    this.RaisePropertyChanged(nameof(HeightPercentage));
+                    this.OnPropertyChanged(nameof(Height));
+                    this.OnPropertyChanged(nameof(HeightPercentage));
                 }
                 if (imageRatioSize.WidthPercentage != value)
                 {
                     imageRatioSize.WidthPercentage = value;
-                    this.RaisePropertyChanged(nameof(Width));
-                    this.RaisePropertyChanged(nameof(WidthPercentage));
+                    this.OnPropertyChanged(nameof(Width));
+                    this.OnPropertyChanged(nameof(WidthPercentage));
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace Kzrnm.WindowCapture.ViewModels
                 if (this.SelectedImage != null
                     && this.SelectedImage.ImageKind != value)
                 {
-                    this.RaisePropertyChanged(nameof(ImageKind));
+                    this.OnPropertyChanged(nameof(ImageKind));
                     this.SelectedImage.ImageKind = value;
                 }
             }
@@ -117,7 +117,7 @@ namespace Kzrnm.WindowCapture.ViewModels
                 if (this.SelectedImage != null
                     && this.SelectedImage.IsSideCutMode != value)
                 {
-                    this.RaisePropertyChanged(nameof(IsSideCutMode));
+                    this.OnPropertyChanged(nameof(IsSideCutMode));
                     this.SelectedImage.IsSideCutMode = value;
                 }
             }
@@ -131,40 +131,40 @@ namespace Kzrnm.WindowCapture.ViewModels
                 if (newImage == null)
                     return;
 
-                this.RaisePropertyChanged(nameof(HasImage));
-                this.RaisePropertyChanged(nameof(Height));
-                this.RaisePropertyChanged(nameof(Width));
-                this.RaisePropertyChanged(nameof(HeightPercentage));
-                this.RaisePropertyChanged(nameof(WidthPercentage));
-                this.RaisePropertyChanged(nameof(ImageKind));
-                this.RaisePropertyChanged(nameof(IsSideCutMode));
+                this.OnPropertyChanged(nameof(HasImage));
+                this.OnPropertyChanged(nameof(Height));
+                this.OnPropertyChanged(nameof(Width));
+                this.OnPropertyChanged(nameof(HeightPercentage));
+                this.OnPropertyChanged(nameof(WidthPercentage));
+                this.OnPropertyChanged(nameof(ImageKind));
+                this.OnPropertyChanged(nameof(IsSideCutMode));
                 return;
             }
 
             if (newImage == null)
             {
-                this.RaisePropertyChanged(nameof(HasImage));
-                //this.RaisePropertyChanged(nameof(Height));
-                //this.RaisePropertyChanged(nameof(Width));
-                //this.RaisePropertyChanged(nameof(HeightPercentage));
-                //this.RaisePropertyChanged(nameof(WidthPercentage));
-                //this.RaisePropertyChanged(nameof(ImageKind));
-                //this.RaisePropertyChanged(nameof(IsSideCutMode));
+                this.OnPropertyChanged(nameof(HasImage));
+                //this.OnPropertyChanged(nameof(Height));
+                //this.OnPropertyChanged(nameof(Width));
+                //this.OnPropertyChanged(nameof(HeightPercentage));
+                //this.OnPropertyChanged(nameof(WidthPercentage));
+                //this.OnPropertyChanged(nameof(ImageKind));
+                //this.OnPropertyChanged(nameof(IsSideCutMode));
                 return;
             }
 
             if (oldImage.ImageRatioSize.Height != newImage.ImageRatioSize.Height)
-                this.RaisePropertyChanged(nameof(Height));
+                this.OnPropertyChanged(nameof(Height));
             if (oldImage.ImageRatioSize.Width != newImage.ImageRatioSize.Width)
-                this.RaisePropertyChanged(nameof(Width));
+                this.OnPropertyChanged(nameof(Width));
             if (oldImage.ImageRatioSize.HeightPercentage != newImage.ImageRatioSize.HeightPercentage)
-                this.RaisePropertyChanged(nameof(HeightPercentage));
+                this.OnPropertyChanged(nameof(HeightPercentage));
             if (oldImage.ImageRatioSize.WidthPercentage != newImage.ImageRatioSize.WidthPercentage)
-                this.RaisePropertyChanged(nameof(WidthPercentage));
+                this.OnPropertyChanged(nameof(WidthPercentage));
             if (oldImage.ImageKind != newImage.ImageKind)
-                this.RaisePropertyChanged(nameof(ImageKind));
+                this.OnPropertyChanged(nameof(ImageKind));
             if (oldImage.IsSideCutMode != newImage.IsSideCutMode)
-                this.RaisePropertyChanged(nameof(IsSideCutMode));
+                this.OnPropertyChanged(nameof(IsSideCutMode));
         }
 
     }
