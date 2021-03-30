@@ -2,26 +2,25 @@
 using Kzrnm.WindowCapture.Images;
 using Kzrnm.WindowCapture.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using Prism.Commands;
-using Prism.Events;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class ImageListViewModel : ObservableObject
+    public class ImageListViewModel : ObservableRecipient, IRecipient<SelectedImageChangedMessage>
     {
-        private readonly IEventAggregator eventAggregator;
         private readonly IClipboardManager clipboard;
         public ImageProvider ImageProvider { get; }
-        public ImageListViewModel(IEventAggregator ea, IClipboardManager clipboardManager, ImageProvider imageProvider)
+        public ImageListViewModel(WeakReferenceMessenger messenger, IClipboardManager clipboardManager, ImageProvider imageProvider)
+            : base(messenger)
         {
-            this.eventAggregator = ea;
             this.ImageProvider = imageProvider;
             this.clipboard = clipboardManager;
             this.DropHandler = new ImageDropTarget(imageProvider);
-            eventAggregator.GetEvent<SelectedImageChangedEvent>().Subscribe(SelectedImageChangedAction);
+            IsActive = true;
         }
 
-        private void SelectedImageChangedAction((CaptureImage? oldImage, CaptureImage? newImage) t)
+        void IRecipient<SelectedImageChangedMessage>.Receive(SelectedImageChangedMessage message)
         {
             _RemoveSelectedImageCommand?.RaiseCanExecuteChanged();
         }

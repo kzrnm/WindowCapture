@@ -1,12 +1,11 @@
 ﻿using Kzrnm.WindowCapture.Images;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Prism.Events;
-using System;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System.Collections.Generic;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class ImageSettingsViewModel : ObservableObject
+    public class ImageSettingsViewModel : ObservableRecipient, IRecipient<SelectedImageChangedMessage>
     {
         public static IReadOnlyCollection<ImageKind> ImageKinds { get; }
         static ImageSettingsViewModel()
@@ -14,19 +13,19 @@ namespace Kzrnm.WindowCapture.ViewModels
             ImageKinds = (ImageKind[])typeof(ImageKind).GetEnumValues();
         }
 
-        private readonly IEventAggregator eventAggregator;
         public ImageProvider ImageProvider { get; }
-        public ImageSettingsViewModel(IEventAggregator ea, ImageProvider imageProvider)
+        public ImageSettingsViewModel(WeakReferenceMessenger messenger, ImageProvider imageProvider)
+            : base(messenger)
         {
             this.ImageProvider = imageProvider;
-            this.eventAggregator = ea;
             this.SelectedImage = imageProvider.SelectedImage;
-
-            SelectedImageChangedAction = t => SelectedImageChanged(t.oldImage, t.newImage);
-            eventAggregator.GetEvent<SelectedImageChangedEvent>().Subscribe(SelectedImageChangedAction);
+            IsActive = true;
         }
 
-        private readonly Action<(CaptureImage? oldImage, CaptureImage? newImage)> SelectedImageChangedAction;
+        void IRecipient<SelectedImageChangedMessage>.Receive(SelectedImageChangedMessage message)
+        {
+            SelectedImageChanged(message.OldValue, message.NewValue);
+        }
 
         private CaptureImage? _SelectedImage;
         public CaptureImage? SelectedImage

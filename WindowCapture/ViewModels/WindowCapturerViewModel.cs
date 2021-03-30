@@ -1,25 +1,24 @@
 ﻿using Kzrnm.WindowCapture.Images;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Prism.Events;
-using System;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System.Windows;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class WindowCapturerViewModel : ObservableObject
+    public class WindowCapturerViewModel : ObservableRecipient, IRecipient<SelectedImageChangedMessage>
     {
-        private readonly IEventAggregator eventAggregator;
         public ImageProvider ImageProvider { get; }
-        public WindowCapturerViewModel(IEventAggregator ea, ImageProvider imageProvider)
+        public WindowCapturerViewModel(WeakReferenceMessenger messenger, ImageProvider imageProvider)
+            : base(messenger)
         {
             this.ImageProvider = imageProvider;
-            this.eventAggregator = ea;
-
-            SelectedImageChanged = _ => UpdateImageVisibility();
-            eventAggregator.GetEvent<SelectedImageChangedEvent>().Subscribe(SelectedImageChanged);
+            IsActive = true;
         }
 
-        private readonly Action<(CaptureImage?, CaptureImage?)> SelectedImageChanged;
+        void IRecipient<SelectedImageChangedMessage>.Receive(SelectedImageChangedMessage message)
+        {
+            UpdateImageVisibility();
+        }
 
         private bool _AlwaysImageArea;
         public bool AlwaysImageArea

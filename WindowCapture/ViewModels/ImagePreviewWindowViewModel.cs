@@ -1,29 +1,28 @@
 ﻿using Kzrnm.WindowCapture.Images;
 using Kzrnm.WindowCapture.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using Prism.Commands;
-using Prism.Events;
-using System;
 using System.Windows;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
-    public class ImagePreviewWindowViewModel : ObservableObject
+    public class ImagePreviewWindowViewModel : ObservableRecipient, IRecipient<SelectedImageChangedMessage>
     {
-        private readonly IEventAggregator eventAggregator;
         private readonly IClipboardManager clipboard;
         public ImageProvider ImageProvider { get; }
-        public ImagePreviewWindowViewModel(IEventAggregator ea, IClipboardManager clipboard, ImageProvider imageProvider)
+        public ImagePreviewWindowViewModel(WeakReferenceMessenger messenger, IClipboardManager clipboard, ImageProvider imageProvider)
+            : base(messenger)
         {
             this.ImageProvider = imageProvider;
-            this.eventAggregator = ea;
             this.clipboard = clipboard;
-
-            SelectedImageChanged = t => this.SelectedImage = t.newImage;
-            eventAggregator.GetEvent<SelectedImageChangedEvent>().Subscribe(SelectedImageChanged);
+            IsActive = true;
         }
 
-        private readonly Action<(CaptureImage? oldImage, CaptureImage? newImage)> SelectedImageChanged;
+        void IRecipient<SelectedImageChangedMessage>.Receive(SelectedImageChangedMessage message)
+        {
+            this.SelectedImage = message.NewValue;
+        }
 
         private DelegateCommand<CaptureImage?>? _CopyToClipboardCommand;
         public DelegateCommand<CaptureImage?> CopyToClipboardCommand

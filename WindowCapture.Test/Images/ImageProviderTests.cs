@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using KzLibraries.EventHandlerHistory;
-using Prism.Events;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -10,27 +10,28 @@ using Xunit;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class ImageProviderTests
+    public class ImageProviderTests : IDisposable, IRecipient<SelectedImageChangedMessage>
     {
-        public EventAggregator EventAggregator;
+        public WeakReferenceMessenger Messenger;
         public ImageProvider ImageProvider;
-
+        public List<SelectedImageChangedMessage> selectedImageChangedHistories = new();
         public ImageProviderTests()
         {
-            EventAggregator = new EventAggregator();
-            ImageProvider = new ImageProvider(EventAggregator);
+            Messenger = new();
+            ImageProvider = new ImageProvider(Messenger);
+            Messenger.Register(this);
         }
+
+        void IDisposable.Dispose() => Messenger.UnregisterAll(this);
+        void IRecipient<SelectedImageChangedMessage>.Receive(SelectedImageChangedMessage message)
+            => selectedImageChangedHistories.Add(message);
 
         [Fact]
         public void AddImageTest()
         {
             var imagesCollectionChangedHistory = new CollectionChangedHistory(this.ImageProvider.Images);
-            int selectedImageChangedCount = 0;
-            Action<(CaptureImage, CaptureImage)> increment = _ => selectedImageChangedCount++;
-            EventAggregator.GetEvent<SelectedImageChangedEvent>().Subscribe(increment);
-
             this.ImageProvider.SelectedImage.Should().BeNull();
-            selectedImageChangedCount.Should().Be(0);
+            selectedImageChangedHistories.Should().HaveCount(0);
 
             this.ImageProvider.AddImage(BitmapSource.Create(
                     2, 2, 96, 96,
@@ -41,7 +42,7 @@ namespace Kzrnm.WindowCapture.Images
             this.ImageProvider.SelectedImageIndex.Should().Be(0);
             this.ImageProvider.Images.Should().ContainSingle();
 
-            selectedImageChangedCount.Should().Be(1);
+            selectedImageChangedHistories.Should().HaveCount(1);
 
             this.ImageProvider.AddImage(
                 BitmapSource.Create(
@@ -60,34 +61,31 @@ namespace Kzrnm.WindowCapture.Images
 
             this.ImageProvider.SelectedImage.Should().NotBeNull();
             this.ImageProvider.SelectedImage!.ImageSource.Height.Should().Be(4);
-            selectedImageChangedCount.Should().Be(2);
+            selectedImageChangedHistories.Should().HaveCount(2);
         }
 
         [Fact]
         public void SelectedImageChangedTest()
         {
-            var eventArgsList = new List<(CaptureImage OldImage, CaptureImage NewImage)>();
-            Action<(CaptureImage, CaptureImage)> addEventArgs = t => eventArgsList.Add(t);
-            EventAggregator.GetEvent<SelectedImageChangedEvent>().Subscribe(addEventArgs);
             var images = new[]{
                 new CaptureImage(TestUtil.DummyBitmapSource(2, 2)),
                 new CaptureImage(TestUtil.DummyBitmapSource(2, 2)),
             };
 
             this.ImageProvider.Images.Add(images[0]);
-            eventArgsList.Should().HaveCount(1);
-            eventArgsList[0].OldImage.Should().BeNull();
-            eventArgsList[0].NewImage.Should().Be(images[0]);
+            selectedImageChangedHistories.Should().HaveCount(1);
+            selectedImageChangedHistories[0].OldValue.Should().BeNull();
+            selectedImageChangedHistories[0].NewValue.Should().Be(images[0]);
 
             this.ImageProvider.Images.Add(images[1]);
-            eventArgsList.Should().HaveCount(2);
-            eventArgsList[1].OldImage.Should().Be(images[0]);
-            eventArgsList[1].NewImage.Should().Be(images[1]);
+            selectedImageChangedHistories.Should().HaveCount(2);
+            selectedImageChangedHistories[1].OldValue.Should().Be(images[0]);
+            selectedImageChangedHistories[1].NewValue.Should().Be(images[1]);
 
             this.ImageProvider.Images.Clear();
-            eventArgsList.Should().HaveCount(3);
-            eventArgsList[2].OldImage.Should().Be(images[1]);
-            eventArgsList[2].NewImage.Should().BeNull();
+            selectedImageChangedHistories.Should().HaveCount(3);
+            selectedImageChangedHistories[2].OldValue.Should().Be(images[1]);
+            selectedImageChangedHistories[2].NewValue.Should().BeNull();
         }
     }
 }

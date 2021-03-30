@@ -14,26 +14,6 @@ namespace Kzrnm.WindowCapture.Images
             new CaptureImage(TestUtil.DummyBitmapSource(2, 2)).JpegQualityLevel.Should().Be(85);
         }
 
-        public static TheoryData IsMatchTest_Data = new TheoryData<bool, string>
-        {
-           {true, "hoge.jpeg" },
-           {true, "hoge.jpg" },
-           {true, "hoge.png" },
-           {true, "hoge.bmp" },
-           {false, "hoge.jpegx" },
-           {false, "hoge.jpgx" },
-           {false, "hoge.pngx" },
-           {false, "hoge.bmpx" },
-           {false, "hoge.exe" },
-        };
-
-        [Theory]
-        [MemberData(nameof(IsMatchTest_Data))]
-        public void IsMatchTest(bool expected, string name)
-        {
-            CaptureImage.IsImageFile(name).Should().Be(expected);
-        }
-
         public static TheoryData ToByteArrayTest_Data = new TheoryData<CaptureImage, byte[], int>()
         {
             {

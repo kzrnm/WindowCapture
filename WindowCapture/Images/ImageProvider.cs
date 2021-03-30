@@ -1,17 +1,17 @@
 ﻿using Kzrnm.WindowCapture.Mvvm;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Prism.Events;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System.Windows.Media.Imaging;
 
 namespace Kzrnm.WindowCapture.Images
 {
     public class ImageProvider : ObservableObject
     {
-        public ImageProvider(IEventAggregator ea) : this(ea, new SelectorObservableCollection<CaptureImage>()) { }
-        protected ImageProvider(IEventAggregator ea, SelectorObservableCollection<CaptureImage> images)
+        public ImageProvider(WeakReferenceMessenger messenger) : this(messenger, new SelectorObservableCollection<CaptureImage>()) { }
+        protected ImageProvider(WeakReferenceMessenger messenger, SelectorObservableCollection<CaptureImage> images)
         {
             this._Images = images;
-            this.eventAggregator = ea;
+            this.Messenger = messenger;
             images.SelectedIndexChanged += (_, _) =>
             {
                 SelectedImageIndex = this._Images.SelectedIndex;
@@ -19,8 +19,7 @@ namespace Kzrnm.WindowCapture.Images
             };
         }
 
-        protected readonly IEventAggregator eventAggregator;
-
+        protected WeakReferenceMessenger Messenger { get; }
         protected readonly SelectorObservableCollection<CaptureImage> _Images;
         public SelectorObservableCollection<CaptureImage> Images => this._Images;
 
@@ -46,7 +45,7 @@ namespace Kzrnm.WindowCapture.Images
                 {
                     if (value != null)
                         lastSelectedOption.Load(value);
-                    eventAggregator.GetEvent<SelectedImageChangedEvent>().Publish((current, value));
+                    Messenger.Send(new SelectedImageChangedMessage(this, nameof(SelectedImage), current, value));
                 }
             }
             get => _SelectedImage;

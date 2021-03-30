@@ -1,7 +1,11 @@
-﻿using Prism.Events;
-using System;
+﻿using Microsoft.Toolkit.Mvvm.Messaging.Messages;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class SelectedImageChangedEvent : PubSubEvent<(CaptureImage? oldImage, CaptureImage? newImage)> { }
+    public class SelectedImageChangedMessage : PropertyChangedMessage<CaptureImage?>
+    {
+        public SelectedImageChangedMessage(object sender, string? propertyName, CaptureImage? oldValue, CaptureImage? newValue) : base(sender, propertyName, oldValue, newValue)
+        {
+        }
+    }
 }

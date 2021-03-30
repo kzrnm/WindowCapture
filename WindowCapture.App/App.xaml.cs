@@ -9,6 +9,7 @@ using System.Text;
 using Prism.Modularity;
 using Kzrnm.WindowCapture;
 using Kzrnm.WindowCapture.Images;
+using Microsoft.Toolkit.Mvvm.Messaging;
 
 namespace CapApp
 {
@@ -21,6 +22,7 @@ namespace CapApp
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<ImageProvider>();
+            containerRegistry.RegisterSingleton<WeakReferenceMessenger>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

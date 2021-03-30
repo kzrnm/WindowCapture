@@ -1,10 +1,8 @@
 ﻿using FluentAssertions;
-using KzLibraries.EventHandlerHistory;
 using Kzrnm.WindowCapture.Images;
 using Kzrnm.WindowCapture.Windows;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using Moq;
-using Prism.Events;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows.Media.Imaging;
 using Xunit;
@@ -13,20 +11,20 @@ namespace Kzrnm.WindowCapture.ViewModels
 {
     public class ImageListViewModelTest
     {
-        public EventAggregator EventAggregator;
+        public WeakReferenceMessenger Messenger;
         public ImageProvider ImageProvider;
 
         public ImageListViewModelTest()
         {
-            EventAggregator = new EventAggregator();
-            ImageProvider = new ImageProvider(EventAggregator);
+            Messenger = new();
+            ImageProvider = new ImageProvider(Messenger);
         }
 
         [Fact]
         public void RemoveSelectedImageCommand()
         {
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImageListViewModel(EventAggregator, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
 
             viewModel.RemoveSelectedImageCommand.CanExecute().Should().BeFalse();
 
@@ -42,7 +40,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void InsertImageFromClipboardCommand()
         {
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImageListViewModel(EventAggregator, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
             viewModel.InsertImageFromClipboardCommand.CanExecute().Should().BeFalse();
 
             viewModel.InsertImageFromClipboardCommand.CanExecute().Should().BeFalse();
@@ -76,7 +74,7 @@ namespace Kzrnm.WindowCapture.ViewModels
             var img = ImageProvider.Images[0];
             img.ImageRatioSize.WidthPercentage = 200;
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImageListViewModel(EventAggregator, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
 
             BitmapSource called = null;
             clipboardMock.Setup(c => c.SetImage(It.IsAny<BitmapSource>())).Callback<BitmapSource>(img => called = img);

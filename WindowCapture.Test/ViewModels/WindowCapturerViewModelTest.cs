@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using KzLibraries.EventHandlerHistory;
 using Kzrnm.WindowCapture.Images;
-using Prism.Events;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System.Collections.Generic;
 using System.Windows;
 using Xunit;
@@ -10,19 +10,19 @@ namespace Kzrnm.WindowCapture.ViewModels
 {
     public class WindowCapturerViewModelTest
     {
-        public EventAggregator EventAggregator;
+        public WeakReferenceMessenger Messenger;
         public ImageProvider ImageProvider;
 
         public WindowCapturerViewModelTest()
         {
-            EventAggregator = new EventAggregator();
-            ImageProvider = new ImageProvider(EventAggregator);
+            Messenger = new();
+            ImageProvider = new ImageProvider(Messenger);
         }
 
         [Fact]
         public void ImageVisibility()
         {
-            var viewModel = new WindowCapturerViewModel(EventAggregator, ImageProvider);
+            var viewModel = new WindowCapturerViewModel(Messenger, ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });

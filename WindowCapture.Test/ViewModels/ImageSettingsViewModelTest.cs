@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using KzLibraries.EventHandlerHistory;
 using Kzrnm.WindowCapture.Images;
-using Prism.Events;
+using Microsoft.Toolkit.Mvvm.Messaging;
 using System.Collections.Generic;
 using Xunit;
 
@@ -9,20 +9,20 @@ namespace Kzrnm.WindowCapture.ViewModels
 {
     public class ImageSettingsViewModelTest
     {
-        public EventAggregator EventAggregator;
+        public WeakReferenceMessenger Messenger;
         public ImageProvider ImageProvider;
 
         public ImageSettingsViewModelTest()
         {
-            EventAggregator = new EventAggregator();
-            ImageProvider = new ImageProvider(EventAggregator);
+            Messenger = new();
+            ImageProvider = new ImageProvider(Messenger);
         }
 
         [Fact]
         public void Width()
         {
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
-            var viewModel = new ImageSettingsViewModel(EventAggregator, ImageProvider);
+            var viewModel = new ImageSettingsViewModel(Messenger, ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });
@@ -50,7 +50,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void Height()
         {
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
-            var viewModel = new ImageSettingsViewModel(EventAggregator, ImageProvider);
+            var viewModel = new ImageSettingsViewModel(Messenger, ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });
@@ -78,7 +78,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void WidthPercentage()
         {
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
-            var viewModel = new ImageSettingsViewModel(EventAggregator, ImageProvider);
+            var viewModel = new ImageSettingsViewModel(Messenger, ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });
@@ -112,7 +112,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void HeightPercentage()
         {
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
-            var viewModel = new ImageSettingsViewModel(EventAggregator, ImageProvider);
+            var viewModel = new ImageSettingsViewModel(Messenger, ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });
@@ -146,7 +146,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void ImageKind()
         {
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
-            var viewModel = new ImageSettingsViewModel(EventAggregator, ImageProvider);
+            var viewModel = new ImageSettingsViewModel(Messenger, ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });
@@ -173,7 +173,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void IsSideCutMode()
         {
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
-            var viewModel = new ImageSettingsViewModel(EventAggregator, ImageProvider);
+            var viewModel = new ImageSettingsViewModel(Messenger, ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });
@@ -199,7 +199,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         [Fact]
         public void SelectedChanged()
         {
-            var viewModel = new ImageSettingsViewModel(EventAggregator, ImageProvider);
+            var viewModel = new ImageSettingsViewModel(Messenger, ImageProvider);
             viewModel.HasImage.Should().BeFalse();
             viewModel.SelectedImage.Should().BeNull();
             viewModel.Width.Should().Be(0);

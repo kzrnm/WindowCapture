@@ -4,7 +4,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>Kzrnm.WindowCapture</RootNamespace>
-    <NoWarn>$(NoWarn);IDE0039;IDE0063;CA2211</NoWarn>
+    <NoWarn>$(NoWarn);IDE0039;IDE0063;CA1816;CA2211</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
