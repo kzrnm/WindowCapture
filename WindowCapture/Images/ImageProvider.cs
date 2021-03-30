@@ -52,7 +52,7 @@ namespace Kzrnm.WindowCapture.Images
             get => _SelectedImage;
         }
 
-        private readonly ImageOption lastSelectedOption = new ImageOption();
+        private readonly ImageOption lastSelectedOption = new();
 
         private void ApplyLastOption(CaptureImage image)
         {

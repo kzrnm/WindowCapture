@@ -11,7 +11,7 @@ namespace CapApp.ViewModels
     {
         public ImageProvider ImageProvider { get; }
 
-        private static readonly Random rnd = new Random();
+        private static readonly Random rnd = new();
         private static BitmapSource CreateRandom()
         {
             PixelFormat pf = PixelFormats.Rgb24;

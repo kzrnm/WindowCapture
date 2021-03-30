@@ -53,6 +53,6 @@ namespace Kzrnm.WindowCapture.ViewModels
                 this.clipboard.SetImage(image.TransformedImage);
         }
 
-        public IDropTarget DropHandler { get; } 
+        public IDropTarget DropHandler { get; }
     }
 }

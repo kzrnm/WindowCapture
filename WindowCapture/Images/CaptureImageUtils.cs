@@ -29,7 +29,7 @@ namespace Kzrnm.WindowCapture.Images
             }
         }
         private static readonly Regex fileNamePattern
-            = new Regex(@"\.(bmp|jpe?g|png)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            = new(@"\.(bmp|jpe?g|png)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         public static bool IsImageFile(ReadOnlySpan<char> fileName)
         {
             var ext = Path.GetExtension(fileName);
@@ -41,7 +41,7 @@ namespace Kzrnm.WindowCapture.Images
                 || ext.Equals("bmp", StringComparison.OrdinalIgnoreCase);
         }
         public static readonly Regex jpegPattern
-            = new Regex(@"\.jpe?g", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            = new(@"\.jpe?g", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         public static bool IsJpegFile(ReadOnlySpan<char> fileName)
         {
             var ext = Path.GetExtension(fileName);

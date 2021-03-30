@@ -46,7 +46,7 @@ namespace Kzrnm.WindowCapture.Views
             if (MainContent != null) MainContent.SizeChanged += this.Content_SizeChanged;
         }
 
-        private bool isWindowLoaded = false;  
+        private bool isWindowLoaded = false;
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ((Window)sender).Loaded -= this.Window_Loaded;
