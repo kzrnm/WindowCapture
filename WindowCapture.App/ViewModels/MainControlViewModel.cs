@@ -1,6 +1,6 @@
 ﻿using Kzrnm.WindowCapture.Images;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Prism.Commands;
+using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -22,10 +22,10 @@ namespace CapApp.ViewModels
             rnd.NextBytes(bytes);
             return BitmapSource.Create(width, height, 96, 96, pf, null, bytes, stride);
         }
-        private DelegateCommand? _AddCommand;
-        public DelegateCommand AddCommand => _AddCommand ??= new DelegateCommand(() => ImageProvider.AddImage(CreateRandom()));
-        private DelegateCommand? _ClearCommand;
-        public DelegateCommand ClearCommand => _ClearCommand ??= new DelegateCommand(ImageProvider.Images.Clear);
+        private RelayCommand? _AddCommand;
+        public RelayCommand AddCommand => _AddCommand ??= new RelayCommand(() => ImageProvider.AddImage(CreateRandom()));
+        private RelayCommand? _ClearCommand;
+        public RelayCommand ClearCommand => _ClearCommand ??= new RelayCommand(ImageProvider.Images.Clear);
         public MainControlViewModel(ImageProvider imageProvider)
         {
             ImageProvider = imageProvider;

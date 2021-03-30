@@ -1,8 +1,8 @@
 ﻿using Kzrnm.WindowCapture.Images;
 using Kzrnm.WindowCapture.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.Messaging;
-using Prism.Commands;
 using System.Windows;
 
 namespace Kzrnm.WindowCapture.ViewModels
@@ -24,9 +24,9 @@ namespace Kzrnm.WindowCapture.ViewModels
             this.SelectedImage = message.NewValue;
         }
 
-        private DelegateCommand<CaptureImage?>? _CopyToClipboardCommand;
-        public DelegateCommand<CaptureImage?> CopyToClipboardCommand
-            => _CopyToClipboardCommand ??= new DelegateCommand<CaptureImage?>(CopySelectedImageToClipboard);
+        private RelayCommand<CaptureImage?>? _CopyToClipboardCommand;
+        public RelayCommand<CaptureImage?> CopyToClipboardCommand
+            => _CopyToClipboardCommand ??= new RelayCommand<CaptureImage?>(CopySelectedImageToClipboard);
         private void CopySelectedImageToClipboard(CaptureImage? obj)
         {
             if (obj is { } image)
@@ -34,10 +34,10 @@ namespace Kzrnm.WindowCapture.ViewModels
         }
 
 
-        public void UpdateCanClipboardCommand() => _PasteImageFromClipboardCommand?.RaiseCanExecuteChanged();
-        private DelegateCommand? _PasteImageFromClipboardCommand;
-        public DelegateCommand PasteImageFromClipboardCommand
-            => _PasteImageFromClipboardCommand ??= new DelegateCommand(PasteImageFromClipboard, clipboard.ContainsImage);
+        public void UpdateCanClipboardCommand() => _PasteImageFromClipboardCommand?.NotifyCanExecuteChanged();
+        private RelayCommand? _PasteImageFromClipboardCommand;
+        public RelayCommand PasteImageFromClipboardCommand
+            => _PasteImageFromClipboardCommand ??= new RelayCommand(PasteImageFromClipboard, clipboard.ContainsImage);
         private void PasteImageFromClipboard()
         {
             if (this.clipboard.GetImage() is { } image)
@@ -65,9 +65,9 @@ namespace Kzrnm.WindowCapture.ViewModels
 
 
 
-        private DelegateCommand? _ClearImageCommand;
-        public DelegateCommand ClearImageCommand
-            => _ClearImageCommand ??= new DelegateCommand(ClearImage);
+        private RelayCommand? _ClearImageCommand;
+        public RelayCommand ClearImageCommand
+            => _ClearImageCommand ??= new RelayCommand(ClearImage);
         public void ClearImage()
         {
             this.ImageProvider.Images.Clear();

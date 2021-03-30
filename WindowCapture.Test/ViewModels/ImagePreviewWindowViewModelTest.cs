@@ -45,16 +45,16 @@ namespace Kzrnm.WindowCapture.ViewModels
             var clipboardMock = new Mock<IClipboardManager>();
             var viewModel = new ImagePreviewWindowViewModel(Messenger, clipboardMock.Object, ImageProvider);
 
-            viewModel.PasteImageFromClipboardCommand.CanExecute().Should().BeFalse();
-            viewModel.PasteImageFromClipboardCommand.Execute();
+            viewModel.PasteImageFromClipboardCommand.CanExecute(null).Should().BeFalse();
+            viewModel.PasteImageFromClipboardCommand.Execute(null);
             ImageProvider.Images.Should().BeEmpty();
 
             clipboardMock.Setup(m => m.ContainsImage()).Returns(true);
             clipboardMock.Setup(m => m.GetImage()).Returns(img);
 
             viewModel.UpdateCanClipboardCommand();
-            viewModel.PasteImageFromClipboardCommand.CanExecute().Should().BeTrue();
-            viewModel.PasteImageFromClipboardCommand.Execute();
+            viewModel.PasteImageFromClipboardCommand.CanExecute(null).Should().BeTrue();
+            viewModel.PasteImageFromClipboardCommand.Execute(null);
             ImageProvider.Images.Should().ContainSingle();
         }
 
@@ -118,7 +118,7 @@ namespace Kzrnm.WindowCapture.ViewModels
             var clipboardMock = new Mock<IClipboardManager>();
             var viewModel = new ImagePreviewWindowViewModel(Messenger, clipboardMock.Object, ImageProvider);
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
-            viewModel.ClearImageCommand.Execute();
+            viewModel.ClearImageCommand.Execute(null);
             ImageProvider.Images.Should().BeEmpty();
         }
     }

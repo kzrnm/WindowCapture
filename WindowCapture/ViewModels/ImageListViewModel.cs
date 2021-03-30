@@ -2,8 +2,8 @@
 using Kzrnm.WindowCapture.Images;
 using Kzrnm.WindowCapture.Windows;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using Microsoft.Toolkit.Mvvm.Messaging;
-using Prism.Commands;
 
 namespace Kzrnm.WindowCapture.ViewModels
 {
@@ -22,19 +22,19 @@ namespace Kzrnm.WindowCapture.ViewModels
 
         void IRecipient<SelectedImageChangedMessage>.Receive(SelectedImageChangedMessage message)
         {
-            _RemoveSelectedImageCommand?.RaiseCanExecuteChanged();
+            _RemoveSelectedImageCommand?.NotifyCanExecuteChanged();
         }
 
-        private DelegateCommand? _RemoveSelectedImageCommand;
-        public DelegateCommand RemoveSelectedImageCommand
-            => _RemoveSelectedImageCommand ??= new DelegateCommand(() => ImageProvider.Images.RemoveSelectedItem(), () => ImageProvider.SelectedImageIndex >= 0);
+        private RelayCommand? _RemoveSelectedImageCommand;
+        public RelayCommand RemoveSelectedImageCommand
+            => _RemoveSelectedImageCommand ??= new RelayCommand(() => ImageProvider.Images.RemoveSelectedItem(), () => ImageProvider.SelectedImageIndex >= 0);
 
 
-        public void UpdateCanClipboardCommand() => _InsertImageFromClipboardCommand?.RaiseCanExecuteChanged();
+        public void UpdateCanClipboardCommand() => _InsertImageFromClipboardCommand?.NotifyCanExecuteChanged();
 
-        private DelegateCommand? _InsertImageFromClipboardCommand;
-        public DelegateCommand InsertImageFromClipboardCommand
-            => _InsertImageFromClipboardCommand ??= new DelegateCommand(InsertImageFromClipboard, clipboard.ContainsImage);
+        private RelayCommand? _InsertImageFromClipboardCommand;
+        public RelayCommand InsertImageFromClipboardCommand
+            => _InsertImageFromClipboardCommand ??= new RelayCommand(InsertImageFromClipboard, clipboard.ContainsImage);
         private void InsertImageFromClipboard()
         {
             if (clipboard.GetImage() is { } image)
@@ -42,9 +42,9 @@ namespace Kzrnm.WindowCapture.ViewModels
         }
 
 
-        private DelegateCommand<CaptureImage>? _CopyToClipboardCommand;
-        public DelegateCommand<CaptureImage> CopyToClipboardCommand
-            => _CopyToClipboardCommand ??= new DelegateCommand<CaptureImage>(CopySelectedImageToClipboard);
+        private RelayCommand<CaptureImage>? _CopyToClipboardCommand;
+        public RelayCommand<CaptureImage> CopyToClipboardCommand
+            => _CopyToClipboardCommand ??= new RelayCommand<CaptureImage>(CopySelectedImageToClipboard);
 
         private void CopySelectedImageToClipboard(CaptureImage? obj)
         {

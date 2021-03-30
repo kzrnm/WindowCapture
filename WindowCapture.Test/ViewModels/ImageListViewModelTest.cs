@@ -26,11 +26,11 @@ namespace Kzrnm.WindowCapture.ViewModels
             var clipboardMock = new Mock<IClipboardManager>();
             var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
 
-            viewModel.RemoveSelectedImageCommand.CanExecute().Should().BeFalse();
+            viewModel.RemoveSelectedImageCommand.CanExecute(null).Should().BeFalse();
 
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(10, 10));
-            viewModel.RemoveSelectedImageCommand.CanExecute().Should().BeTrue();
-            viewModel.RemoveSelectedImageCommand.Execute();
+            viewModel.RemoveSelectedImageCommand.CanExecute(null).Should().BeTrue();
+            viewModel.RemoveSelectedImageCommand.Execute(null);
             ImageProvider.SelectedImage.Should().BeNull();
             ImageProvider.Images.Should().BeEmpty();
         }
@@ -41,10 +41,10 @@ namespace Kzrnm.WindowCapture.ViewModels
         {
             var clipboardMock = new Mock<IClipboardManager>();
             var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
-            viewModel.InsertImageFromClipboardCommand.CanExecute().Should().BeFalse();
+            viewModel.InsertImageFromClipboardCommand.CanExecute(null).Should().BeFalse();
 
-            viewModel.InsertImageFromClipboardCommand.CanExecute().Should().BeFalse();
-            viewModel.InsertImageFromClipboardCommand.Execute();
+            viewModel.InsertImageFromClipboardCommand.CanExecute(null).Should().BeFalse();
+            viewModel.InsertImageFromClipboardCommand.Execute(null);
             ImageProvider.Images.Should().BeEmpty();
 
             NotifyCollectionChangedEventArgs lastCollectionChanged = null;
@@ -53,17 +53,17 @@ namespace Kzrnm.WindowCapture.ViewModels
             clipboardMock.Setup(m => m.ContainsImage()).Returns(true);
             clipboardMock.Setup(m => m.GetImage()).Returns(() => TestUtil.DummyBitmapSource(10, 10));
 
-            viewModel.InsertImageFromClipboardCommand.CanExecute().Should().BeTrue();
-            viewModel.InsertImageFromClipboardCommand.Execute();
+            viewModel.InsertImageFromClipboardCommand.CanExecute(null).Should().BeTrue();
+            viewModel.InsertImageFromClipboardCommand.Execute(null);
             lastCollectionChanged.NewStartingIndex.Should().Be(0);
 
-            viewModel.InsertImageFromClipboardCommand.CanExecute().Should().BeTrue();
-            viewModel.InsertImageFromClipboardCommand.Execute();
+            viewModel.InsertImageFromClipboardCommand.CanExecute(null).Should().BeTrue();
+            viewModel.InsertImageFromClipboardCommand.Execute(null);
             lastCollectionChanged.NewStartingIndex.Should().Be(1);
 
             ImageProvider.Images.SelectedIndex = 0;
-            viewModel.InsertImageFromClipboardCommand.CanExecute().Should().BeTrue();
-            viewModel.InsertImageFromClipboardCommand.Execute();
+            viewModel.InsertImageFromClipboardCommand.CanExecute(null).Should().BeTrue();
+            viewModel.InsertImageFromClipboardCommand.Execute(null);
             lastCollectionChanged.NewStartingIndex.Should().Be(1);
         }
 
