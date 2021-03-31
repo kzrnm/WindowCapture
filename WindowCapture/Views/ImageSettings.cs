@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using Kzrnm.WindowCapture.ViewModels;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,7 +14,7 @@ namespace Kzrnm.WindowCapture.Views
 
         public ImageSettings()
         {
-            ViewModelLocator.SetAutoWireViewModel(this, true);
+            this.DataContext = Ioc.Default.GetService<ImageSettingsViewModel>();
         }
     }
 }

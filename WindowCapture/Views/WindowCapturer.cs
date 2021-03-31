@@ -1,14 +1,18 @@
-﻿using Prism;
-using Prism.Ioc;
-using Prism.Mvvm;
+﻿using Kzrnm.WindowCapture.ViewModels;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace Kzrnm.WindowCapture.Views
 {
+    [ContentProperty(nameof(DockPanelChildren))]
+    [DefaultProperty(nameof(DockPanelChildren))]
     public class WindowCapturer : Control
     {
         static WindowCapturer()
@@ -18,11 +22,11 @@ namespace Kzrnm.WindowCapture.Views
 
         public WindowCapturer()
         {
-            ViewModelLocator.SetAutoWireViewModel(this, true);
+            this.ViewModel = Ioc.Default.GetService<WindowCapturerViewModel>();
             SetBinding(AlwaysImageAreaProperty,
-                new Binding(nameof(ViewModels.WindowCapturerViewModel.AlwaysImageArea))
+                new Binding(nameof(WindowCapturerViewModel.AlwaysImageArea))
                 {
-                    Source = DataContext,
+                    Source = ViewModel,
                     Mode = BindingMode.OneWayToSource,
                 });
         }
@@ -36,14 +40,24 @@ namespace Kzrnm.WindowCapture.Views
             window.Closing += this.Window_Closing;
         }
 
+        public WindowCapturerViewModel? ViewModel { get; }
+        public ObservableCollection<UIElement> DockPanelChildren { get; } = new();
 
-        private ContentControl? MainContent;
+        private DockPanel? DockPanel;
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if (MainContent != null) MainContent.SizeChanged -= this.Content_SizeChanged;
-            this.MainContent = this.GetTemplateChild("PART_MainContent") as ContentControl;
-            if (MainContent != null) MainContent.SizeChanged += this.Content_SizeChanged;
+            if (this.DockPanel is not null)
+            {
+                foreach (var item in DockPanelChildren)
+                    this.DockPanel.Children.Remove(item);
+            }
+            this.DockPanel = this.GetTemplateChild("PART_DockPanel") as DockPanel;
+            if (this.DockPanel is not null)
+            {
+                foreach (var item in DockPanelChildren)
+                    this.DockPanel.Children.Add(item);
+            }
         }
 
         private bool isWindowLoaded = false;
@@ -133,9 +147,8 @@ namespace Kzrnm.WindowCapture.Views
         }
         private void MakePreviewWindow()
         {
-            var app = (PrismApplicationBase)Application.Current;
             var mainWindow = Window.GetWindow(this);
-            imagePreviewWindow = app.Container.Resolve<ImagePreviewWindow>();
+            imagePreviewWindow = new();
             imagePreviewWindow.Owner = mainWindow;
             imagePreviewWindow.Top = mainWindow.Top + mainWindow.Height / 2;
             imagePreviewWindow.Left = mainWindow.Left + mainWindow.Width / 2;

@@ -218,17 +218,15 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type views:WindowCapturer}">
-                    <DockPanel d:DataContext="{d:DesignInstance Type=viewmodels:WindowCapturerViewModel}">
-                        <Grid DockPanel.Dock="Right" Visibility="{Binding ImageVisibility}">
-                            <views:ImageSettings Width="{Binding SettingsWidth, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}" />
-                        </Grid>
-                        <Grid DockPanel.Dock="Bottom" Visibility="{Binding ImageVisibility}">
-                            <views:ImageListView Height="{Binding ListHeight, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}" />
-                        </Grid>
-                        <ContentControl
-                            x:Name="PART_MainContent"
-                            prism:RegionManager.RegionName="ContentRegion"
-                            Focusable="False" />
+                    <DockPanel x:Name="PART_DockPanel">
+                        <views:ImageSettings
+                            Width="{Binding SettingsWidth, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}"
+                            DockPanel.Dock="Right"
+                            Visibility="{Binding ViewModel.ImageVisibility, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}" />
+                        <views:ImageListView
+                            Height="{Binding ListHeight, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}"
+                            DockPanel.Dock="Bottom"
+                            Visibility="{Binding ViewModel.ImageVisibility, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}" />
                     </DockPanel>
                 </ControlTemplate>
             </Setter.Value>

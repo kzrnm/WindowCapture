@@ -1,15 +1,13 @@
-﻿using Prism.Ioc;
-using System.Windows;
-using CapApp.Views;
+﻿using Kzrnm.WindowCapture.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Prism.Modularity;
-using Kzrnm.WindowCapture;
-using Kzrnm.WindowCapture.Images;
-using Microsoft.Toolkit.Mvvm.Messaging;
+using System.Windows;
+using CapApp.ViewModels;
 
 namespace CapApp
 {
@@ -18,21 +16,12 @@ namespace CapApp
     /// </summary>
     public partial class App
     {
-        protected override Window CreateShell() => Container.Resolve<MainWindow>();
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
-        {
-            containerRegistry.RegisterSingleton<ImageProvider>();
-            containerRegistry.RegisterSingleton<WeakReferenceMessenger>();
-        }
-
-        protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
-        {
-            moduleCatalog.AddModule<WindowCaptureModule<MainControl>>();
-        }
-
         public static string ExePath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? throw new InvalidOperationException();
         public App()
         {
+            Ioc.Default.ConfigureServices(ServiceBuilder.Default
+                .AddSingleton<MainWindowViewModel>()
+                .BuildServiceProvider());
 #if !DEBUG
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 #endif

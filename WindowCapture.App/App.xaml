@@ -1,8 +1,7 @@
-﻿<prism:PrismApplication
+﻿<Application
     x:Class="CapApp.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:CapApp"
-    xmlns:prism="http://prismlibrary.com/">
+    StartupUri="Views/MainWIndow.xaml">
     <Application.Resources />
-</prism:PrismApplication>
+</Application>

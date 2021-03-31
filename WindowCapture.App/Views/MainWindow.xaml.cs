@@ -37,5 +37,10 @@ namespace CapApp.Views
                 this.MinHeight += e.HeightDiff;
             }
         }
+
+        private void StackPanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
     }
 }
