@@ -11,7 +11,10 @@ namespace Kzrnm.WindowCapture.ViewModels
     {
         private readonly IClipboardManager clipboard;
         public ImageProvider ImageProvider { get; }
-        public ImageListViewModel(WeakReferenceMessenger messenger, IClipboardManager clipboardManager, ImageProvider imageProvider)
+        public ImageListViewModel(IClipboardManager clipboardManager, ImageProvider imageProvider)
+            : this(WeakReferenceMessenger.Default, clipboardManager, imageProvider)
+        { }
+        public ImageListViewModel(IMessenger messenger, IClipboardManager clipboardManager, ImageProvider imageProvider)
             : base(messenger)
         {
             this.ImageProvider = imageProvider;

@@ -7,8 +7,10 @@ namespace Kzrnm.WindowCapture.Images
 {
     public class ImageProvider : ObservableRecipient
     {
-        public ImageProvider(WeakReferenceMessenger messenger) : this(messenger, new SelectorObservableCollection<CaptureImage>()) { }
-        protected ImageProvider(WeakReferenceMessenger messenger, SelectorObservableCollection<CaptureImage> images)
+        public ImageProvider()
+            : this(WeakReferenceMessenger.Default, new SelectorObservableCollection<CaptureImage>()) { }
+        public ImageProvider(IMessenger messenger) : this(messenger, new SelectorObservableCollection<CaptureImage>()) { }
+        protected ImageProvider(IMessenger messenger, SelectorObservableCollection<CaptureImage> images)
             : base(messenger)
         {
             this._Images = images;

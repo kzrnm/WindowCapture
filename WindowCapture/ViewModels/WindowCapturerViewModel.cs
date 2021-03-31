@@ -9,7 +9,10 @@ namespace Kzrnm.WindowCapture.ViewModels
     public class WindowCapturerViewModel : ObservableRecipient, IRecipient<SelectedImageChangedMessage>
     {
         public ImageProvider ImageProvider { get; }
-        public WindowCapturerViewModel(WeakReferenceMessenger messenger, ImageProvider imageProvider)
+        public WindowCapturerViewModel(ImageProvider imageProvider)
+            : this(WeakReferenceMessenger.Default, imageProvider)
+        { }
+        public WindowCapturerViewModel(IMessenger messenger, ImageProvider imageProvider)
             : base(messenger)
         {
             this.ImageProvider = imageProvider;

@@ -14,7 +14,10 @@ namespace Kzrnm.WindowCapture.ViewModels
         }
 
         public ImageProvider ImageProvider { get; }
-        public ImageSettingsViewModel(WeakReferenceMessenger messenger, ImageProvider imageProvider)
+        public ImageSettingsViewModel(ImageProvider imageProvider)
+            : this(WeakReferenceMessenger.Default, imageProvider)
+        { }
+        public ImageSettingsViewModel(IMessenger messenger, ImageProvider imageProvider)
             : base(messenger)
         {
             this.ImageProvider = imageProvider;

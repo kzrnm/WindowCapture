@@ -2,7 +2,6 @@
 using Kzrnm.WindowCapture.ViewModels;
 using Kzrnm.WindowCapture.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Toolkit.Mvvm.Messaging;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,7 +10,6 @@ namespace Kzrnm.WindowCapture.DependencyInjection
     public class ServiceBuilder : IServiceCollection
     {
         private ServiceBuilder() {
-            services.AddSingleton<WeakReferenceMessenger>();
             services.AddSingleton<ImageProvider>();
             services.AddSingleton<IClipboardManager, ClipboardManager>();
             
