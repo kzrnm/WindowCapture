@@ -5,13 +5,13 @@ using System.Windows.Media.Imaging;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class ImageProvider : ObservableObject
+    public class ImageProvider : ObservableRecipient
     {
         public ImageProvider(WeakReferenceMessenger messenger) : this(messenger, new SelectorObservableCollection<CaptureImage>()) { }
         protected ImageProvider(WeakReferenceMessenger messenger, SelectorObservableCollection<CaptureImage> images)
+            : base(messenger)
         {
             this._Images = images;
-            this.Messenger = messenger;
             images.SelectedIndexChanged += (_, _) =>
             {
                 SelectedImageIndex = this._Images.SelectedIndex;
@@ -19,7 +19,6 @@ namespace Kzrnm.WindowCapture.Images
             };
         }
 
-        protected WeakReferenceMessenger Messenger { get; }
         protected readonly SelectorObservableCollection<CaptureImage> _Images;
         public SelectorObservableCollection<CaptureImage> Images => this._Images;
 

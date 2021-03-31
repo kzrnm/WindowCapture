@@ -26,7 +26,9 @@ namespace Kzrnm.WindowCapture.Views
             SetDock(ImageSettings, Dock.Right);
             SetDock(ImageListView, Dock.Bottom);
 
-            this.ViewModel = Ioc.Default.GetService<WindowCapturerViewModel>();
+            this.ViewModel = Ioc.Default.GetService<WindowCapturerViewModel>()!;
+            if (this.ViewModel is null)
+                throw new NullReferenceException($"{nameof(WindowCapturerViewModel)} is not Registered");
             SetBinding(AlwaysImageAreaProperty,
                 new Binding(nameof(WindowCapturerViewModel.AlwaysImageArea))
                 {
@@ -46,6 +48,63 @@ namespace Kzrnm.WindowCapture.Views
                     Mode = BindingMode.OneWay,
                 });
 
+            Loaded += this.OnLoaded;
+            Unloaded += this.OnUnloaded;
+        }
+
+        public WindowCapturerViewModel ViewModel { get; }
+        public ImageSettings ImageSettings { get; } = new();
+        public ImageListView ImageListView { get; } = new();
+
+        protected override void OnRender(DrawingContext dc)
+        {
+            base.OnRender(dc);
+        }
+
+        private void ViewModel_PropertyChanging(object? sender, PropertyChangingEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.ImageVisibility):
+                    if (ViewModel.ImageVisibility == Visibility.Visible)
+                        OnImageVisibilityChanged(false);
+                    break;
+            }
+        }
+
+        private void ViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(ViewModel.ImageVisibility):
+                    if (ViewModel.ImageVisibility == Visibility.Visible)
+                        OnImageVisibilityChanged(true);
+                    break;
+            }
+        }
+
+        private void OnImageVisibilityChanged(bool newIsVisible)
+        {
+            if (AlwaysImageArea) return;
+            if (Window.GetWindow(this) is not { } window) return;
+
+            var width = ImageSettings.ActualWidth;
+            var height = ImageListView.ActualHeight;
+            if (!newIsVisible)
+            {
+                width = -width;
+                height = -height;
+            }
+            window.Width += width;
+            window.Height += height;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (Window.GetWindow(this) is not { } window) return;
+            if (HasPreviewWindow) MakePreviewWindow(window);
+            window.Closing += (_, _) => ViewModel.OnWindowClosing();
+
             var visibilityBinding = new Binding(nameof(ViewModel.ImageVisibility))
             {
                 Source = ViewModel,
@@ -53,24 +112,15 @@ namespace Kzrnm.WindowCapture.Views
             };
             ImageSettings.SetBinding(VisibilityProperty, visibilityBinding);
             ImageListView.SetBinding(VisibilityProperty, visibilityBinding);
-            Loaded += this.OnLoaded;
+
+            ViewModel.PropertyChanging += this.ViewModel_PropertyChanging;
+            ViewModel.PropertyChanged += this.ViewModel_PropertyChanged;
         }
 
-        public WindowCapturerViewModel? ViewModel { get; }
-        public ImageSettings ImageSettings { get; } = new();
-        public ImageListView ImageListView { get; } = new();
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
+        private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            var window = Window.GetWindow(this);
-            if (HasPreviewWindow) MakePreviewWindow(window);
-            window.Closing += this.Window_Closing;
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            if (!AlwaysImageArea)
-                UpdateExpandSize(new Size(0, 0));
+            ViewModel.PropertyChanging += this.ViewModel_PropertyChanging;
+            ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
         }
 
         public static readonly DependencyProperty ImageWidthProperty =
@@ -150,28 +200,6 @@ namespace Kzrnm.WindowCapture.Views
             imagePreviewWindow.Owner = window;
             imagePreviewWindow.Top = window.Top + window.Height / 2;
             imagePreviewWindow.Left = window.Left + window.Width / 2;
-        }
-
-        private Size expandSize;
-        public event ExpandSizeChangedEventHandler? ExpandSizeChanged;
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
-        {
-            base.OnRenderSizeChanged(sizeInfo);
-            //var contentSize = ((ContentControl)sender).RenderSize;
-            //if (contentSize.Width == 0 || contentSize.Height == 0)
-            //    return;
-
-            //var wcSize = this.RenderSize;
-            //var nextSize = new Size(wcSize.Width - contentSize.Width, wcSize.Height - contentSize.Height);
-            //UpdateExpandSize(nextSize);
-        }
-        private void UpdateExpandSize(Size nextSize)
-        {
-            if (this.expandSize == nextSize)
-                return;
-
-            this.ExpandSizeChanged?.Invoke(this, new ExpandSizeChangedEventArgs(this.expandSize, nextSize));
-            this.expandSize = nextSize;
         }
     }
 }
