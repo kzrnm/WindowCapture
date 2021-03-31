@@ -22,6 +22,7 @@
     mc:Ignorable="d">
 
     <wc:WindowCapturer
+        ExpandSizeChanged="WindowCapturer_ExpandSizeChanged"
         AlwaysImageArea="False"
         ImageWidth="65"
         ListHeight="70">

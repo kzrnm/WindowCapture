@@ -8,12 +8,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
+using System.Windows.Media;
 
 namespace Kzrnm.WindowCapture.Views
 {
-    [ContentProperty(nameof(DockPanelChildren))]
-    [DefaultProperty(nameof(DockPanelChildren))]
-    public class WindowCapturer : Control
+    public class WindowCapturer : DockPanel
     {
         static WindowCapturer()
         {
@@ -22,6 +21,11 @@ namespace Kzrnm.WindowCapture.Views
 
         public WindowCapturer()
         {
+            Children.Add(ImageSettings);
+            Children.Add(ImageListView);
+            SetDock(ImageSettings, Dock.Right);
+            SetDock(ImageListView, Dock.Bottom);
+
             this.ViewModel = Ioc.Default.GetService<WindowCapturerViewModel>();
             SetBinding(AlwaysImageAreaProperty,
                 new Binding(nameof(WindowCapturerViewModel.AlwaysImageArea))
@@ -29,43 +33,38 @@ namespace Kzrnm.WindowCapture.Views
                     Source = ViewModel,
                     Mode = BindingMode.OneWayToSource,
                 });
-        }
-        protected override void OnInitialized(EventArgs e)
-        {
-            base.OnInitialized(e);
-            if (DesignerProperties.GetIsInDesignMode(this))
-                return;
-            var window = Window.GetWindow(this);
-            window.Loaded += Window_Loaded;
-            window.Closing += this.Window_Closing;
+            ImageSettings.SetBinding(WidthProperty,
+                new Binding(nameof(SettingsWidth))
+                {
+                    Source = this,
+                    Mode = BindingMode.OneWay,
+                });
+            ImageListView.SetBinding(HeightProperty,
+                new Binding(nameof(ListHeight))
+                {
+                    Source = this,
+                    Mode = BindingMode.OneWay,
+                });
+
+            var visibilityBinding = new Binding(nameof(ViewModel.ImageVisibility))
+            {
+                Source = ViewModel,
+                Mode = BindingMode.OneWay,
+            };
+            ImageSettings.SetBinding(VisibilityProperty, visibilityBinding);
+            ImageListView.SetBinding(VisibilityProperty, visibilityBinding);
+            Loaded += this.OnLoaded;
         }
 
         public WindowCapturerViewModel? ViewModel { get; }
-        public ObservableCollection<UIElement> DockPanelChildren { get; } = new();
+        public ImageSettings ImageSettings { get; } = new();
+        public ImageListView ImageListView { get; } = new();
 
-        private DockPanel? DockPanel;
-        public override void OnApplyTemplate()
+        private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            base.OnApplyTemplate();
-            if (this.DockPanel is not null)
-            {
-                foreach (var item in DockPanelChildren)
-                    this.DockPanel.Children.Remove(item);
-            }
-            this.DockPanel = this.GetTemplateChild("PART_DockPanel") as DockPanel;
-            if (this.DockPanel is not null)
-            {
-                foreach (var item in DockPanelChildren)
-                    this.DockPanel.Children.Add(item);
-            }
-        }
-
-        private bool isWindowLoaded = false;
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            ((Window)sender).Loaded -= this.Window_Loaded;
-            isWindowLoaded = true;
-            if (HasPreviewWindow) MakePreviewWindow();
+            var window = Window.GetWindow(this);
+            if (HasPreviewWindow) MakePreviewWindow(window);
+            window.Closing += this.Window_Closing;
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -136,8 +135,8 @@ namespace Kzrnm.WindowCapture.Views
         {
             if (newValue)
             {
-                if (isWindowLoaded && imagePreviewWindow == null)
-                    MakePreviewWindow();
+                if (imagePreviewWindow == null)
+                    MakePreviewWindow(Window.GetWindow(this));
             }
             else if (imagePreviewWindow is { } ipw)
             {
@@ -145,26 +144,26 @@ namespace Kzrnm.WindowCapture.Views
                 ipw.Close();
             }
         }
-        private void MakePreviewWindow()
+        private void MakePreviewWindow(Window window)
         {
-            var mainWindow = Window.GetWindow(this);
             imagePreviewWindow = new();
-            imagePreviewWindow.Owner = mainWindow;
-            imagePreviewWindow.Top = mainWindow.Top + mainWindow.Height / 2;
-            imagePreviewWindow.Left = mainWindow.Left + mainWindow.Width / 2;
+            imagePreviewWindow.Owner = window;
+            imagePreviewWindow.Top = window.Top + window.Height / 2;
+            imagePreviewWindow.Left = window.Left + window.Width / 2;
         }
 
         private Size expandSize;
         public event ExpandSizeChangedEventHandler? ExpandSizeChanged;
-        private void Content_SizeChanged(object sender, SizeChangedEventArgs e)
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
-            var contentSize = ((ContentControl)sender).RenderSize;
-            if (contentSize.Width == 0 || contentSize.Height == 0)
-                return;
+            base.OnRenderSizeChanged(sizeInfo);
+            //var contentSize = ((ContentControl)sender).RenderSize;
+            //if (contentSize.Width == 0 || contentSize.Height == 0)
+            //    return;
 
-            var wcSize = this.RenderSize;
-            var nextSize = new Size(wcSize.Width - contentSize.Width, wcSize.Height - contentSize.Height);
-            UpdateExpandSize(nextSize);
+            //var wcSize = this.RenderSize;
+            //var nextSize = new Size(wcSize.Width - contentSize.Width, wcSize.Height - contentSize.Height);
+            //UpdateExpandSize(nextSize);
         }
         private void UpdateExpandSize(Size nextSize)
         {

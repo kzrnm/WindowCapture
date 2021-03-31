@@ -33,6 +33,9 @@ namespace CapApp.ViewModels
         private RelayCommand? _AddCommand;
         public RelayCommand AddCommand => _AddCommand ??= new RelayCommand(() => ImageProvider.AddImage(CreateRandom()));
         private RelayCommand? _ClearCommand;
-        public RelayCommand ClearCommand => _ClearCommand ??= new RelayCommand(ImageProvider.Images.Clear);
+        public RelayCommand ClearCommand => _ClearCommand ??= new RelayCommand(() =>
+        {
+            ImageProvider.Images.Clear();
+        });
     }
 }

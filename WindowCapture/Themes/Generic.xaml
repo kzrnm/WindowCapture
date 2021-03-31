@@ -6,7 +6,6 @@
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:kz="https://github.com/naminodarie/KzLibraries/"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="http://prismlibrary.com/"
     xmlns:properties="clr-namespace:Kzrnm.WindowCapture.Properties"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:viewmodels="clr-namespace:Kzrnm.WindowCapture.ViewModels"
@@ -209,25 +208,6 @@
                             Content="{x:Static properties:Resources.SideCutMode}"
                             IsChecked="{Binding IsSideCutMode}" />
                     </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type views:WindowCapturer}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type views:WindowCapturer}">
-                    <DockPanel x:Name="PART_DockPanel">
-                        <views:ImageSettings
-                            Width="{Binding SettingsWidth, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}"
-                            DockPanel.Dock="Right"
-                            Visibility="{Binding ViewModel.ImageVisibility, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}" />
-                        <views:ImageListView
-                            Height="{Binding ListHeight, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}"
-                            DockPanel.Dock="Bottom"
-                            Visibility="{Binding ViewModel.ImageVisibility, RelativeSource={RelativeSource AncestorType=views:WindowCapturer}}" />
-                    </DockPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
