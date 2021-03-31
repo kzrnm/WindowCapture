@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class ImageProvider : ObservableRecipient
+    public class ImageProvider : ObservableRecipient, IRecipient<WindowClosingMessage>
     {
         public ImageProvider()
             : this(WeakReferenceMessenger.Default, new SelectorObservableCollection<CaptureImage>()) { }
@@ -19,6 +19,12 @@ namespace Kzrnm.WindowCapture.Images
                 SelectedImageIndex = this._Images.SelectedIndex;
                 SelectedImage = this._Images.SelectedItem;
             };
+            Messenger.Register(this);
+        }
+
+        void IRecipient<WindowClosingMessage>.Receive(WindowClosingMessage message)
+        {
+            _Images.Clear();
         }
 
         protected readonly SelectorObservableCollection<CaptureImage> _Images;
@@ -108,7 +114,6 @@ namespace Kzrnm.WindowCapture.Images
             this.Images.Insert(index, image);
             return true;
         }
-
 
         private class ImageOption
         {

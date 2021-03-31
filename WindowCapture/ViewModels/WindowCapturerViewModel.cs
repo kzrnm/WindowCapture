@@ -15,6 +15,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public WindowCapturerViewModel(IMessenger messenger, ImageProvider imageProvider)
             : base(messenger)
         {
+            this.DropHandler = new ImageDropTarget(imageProvider, true);
             this.ImageProvider = imageProvider;
             IsActive = true;
         }
@@ -23,6 +24,8 @@ namespace Kzrnm.WindowCapture.ViewModels
         {
             UpdateImageVisibility();
         }
+
+        public ImageDropTarget DropHandler { get; }
 
         private bool _AlwaysImageArea;
         public bool AlwaysImageArea

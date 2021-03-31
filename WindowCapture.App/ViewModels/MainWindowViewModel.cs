@@ -13,9 +13,7 @@ namespace CapApp.ViewModels
         public MainWindowViewModel(ImageProvider imageProvider)
         {
             this.ImageProvider = imageProvider;
-            this.DropHandler = new ImageDropTarget(imageProvider, true);
         }
-        public IDropTarget DropHandler { get; }
         public ImageProvider ImageProvider { get; }
 
 

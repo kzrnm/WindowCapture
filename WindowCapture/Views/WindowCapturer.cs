@@ -1,4 +1,5 @@
-﻿using Kzrnm.WindowCapture.ViewModels;
+﻿using Kzrnm.WindowCapture.Images;
+using Kzrnm.WindowCapture.ViewModels;
 using Microsoft.Toolkit.Mvvm.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
+using DragDrop = GongSolutions.Wpf.DragDrop.DragDrop;
 
 namespace Kzrnm.WindowCapture.Views
 {
@@ -115,11 +117,15 @@ namespace Kzrnm.WindowCapture.Views
 
             ViewModel.PropertyChanging += this.ViewModel_PropertyChanging;
             ViewModel.PropertyChanged += this.ViewModel_PropertyChanged;
+
+            DragDrop.SetIsDropTarget(this, true);
+            DragDrop.SetDropEventType(this, GongSolutions.Wpf.DragDrop.EventType.Bubbled);
+            DragDrop.SetDropHandler(this, ViewModel.DropHandler);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.PropertyChanging += this.ViewModel_PropertyChanging;
+            ViewModel.PropertyChanging -= this.ViewModel_PropertyChanging;
             ViewModel.PropertyChanged -= this.ViewModel_PropertyChanged;
         }
 
@@ -162,7 +168,7 @@ namespace Kzrnm.WindowCapture.Views
                 nameof(AlwaysImageArea),
                 typeof(bool),
                 typeof(WindowCapturer),
-                new PropertyMetadata(false));
+                new PropertyMetadata(true));
         public bool AlwaysImageArea
         {
             get => (bool)GetValue(AlwaysImageAreaProperty);

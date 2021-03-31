@@ -17,6 +17,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public ImagePreviewWindowViewModel(IMessenger messenger, IClipboardManager clipboard, ImageProvider imageProvider)
             : base(messenger)
         {
+            this.DropHandler = new ImageDropTarget(imageProvider, false);
             this.ImageProvider = imageProvider;
             this.clipboard = clipboard;
             IsActive = true;
@@ -26,6 +27,8 @@ namespace Kzrnm.WindowCapture.ViewModels
         {
             this.SelectedImage = message.NewValue;
         }
+
+        public ImageDropTarget DropHandler { get; }
 
         private RelayCommand<CaptureImage?>? _CopyToClipboardCommand;
         public RelayCommand<CaptureImage?> CopyToClipboardCommand

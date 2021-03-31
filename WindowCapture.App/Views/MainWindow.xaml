@@ -14,18 +14,14 @@
     d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
     d:DesignHeight="200"
     d:DesignWidth="400"
-    dd:DragDrop.DropEventType="Bubbled"
-    dd:DragDrop.DropHandler="{Binding DropHandler}"
-    dd:DragDrop.IsDropTarget="True"
     wc:IocBehavior.AutoViewModel="{x:Type vm:MainWindowViewModel}"
     Background="AliceBlue"
     mc:Ignorable="d">
-
     <wc:WindowCapturer
         AlwaysImageArea="False"
         ImageWidth="65"
         ListHeight="70">
-        <StackPanel Background="AliceBlue">
+        <StackPanel Background="IndianRed">
             <Button Command="{Binding AddCommand}" Content="ダミー画像" />
             <Button Command="{Binding ClearCommand}" Content="クリア" />
             <TextBlock Text="hoge" />
