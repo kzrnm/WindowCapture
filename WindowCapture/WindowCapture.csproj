@@ -10,11 +10,18 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="gong-wpf-dragdrop" Version="2.3.2" />
-    <PackageReference Include="KzWpfControl" Version="0.0.3" />
+    <PackageReference Include="KzWpfControl" Version="0.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
   </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>WindowCapture.Test, PublicKey=0024000004800000940000000602000000240000525341310004000001000100f928047f8420ef51d196b776c6efc2b7d9435ff8b43ef230e221ba7f2d423287654cc4d468d570c2682d655a98d9381aab979710c275002d0dcd46f0416d3c95265673b66fb4aa573f532e436362eb97e75473fade2769a679bc39f054e24f9c53f940060ea54cff8b5707417162ea4e8968c6acaaeb5e69118b111dcf30d5f7</_Parameter1>
+    </AssemblyAttribute> 
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
