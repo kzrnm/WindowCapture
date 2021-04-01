@@ -13,11 +13,6 @@ namespace Kzrnm.WindowCapture.Images
                 dragInfo.DataFormat = DataFormats.GetDataFormat(DataFormats.Bitmap);
                 var dataObj = new DataObject();
                 dataObj.SetImage(image.TransformedImage);
-                dataObj.SetImage(image.TransformedImage);
-                dataObj.SetImage(image.TransformedImage);
-                dataObj.SetImage(image.TransformedImage);
-                dataObj.SetImage(image.TransformedImage);
-                dataObj.SetImage(image.TransformedImage);
                 dragInfo.DataObject = dataObj;
             }
         }

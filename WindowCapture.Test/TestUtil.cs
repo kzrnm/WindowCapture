@@ -1,3 +1,4 @@
+using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -13,6 +14,17 @@ namespace Kzrnm.WindowCapture
             PixelFormats.Indexed1,
             new BitmapPalette(new[] { Colors.Transparent }),
             new byte[stride * width], stride);
+        }
+
+        public static byte[] ImageToByte(BitmapSource bmp)
+        {
+            byte[] data;
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bmp));
+            using var ms = new MemoryStream();
+            encoder.Save(ms);
+            data = ms.ToArray();
+            return data;
         }
     }
 }
