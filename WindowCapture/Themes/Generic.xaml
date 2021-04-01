@@ -31,6 +31,7 @@
                         <ListBox
                             Grid.Column="1"
                             dd:DragDrop.DropEventType="Bubbled"
+                            dd:DragDrop.DragHandler="{Binding DragHandler}"
                             dd:DragDrop.DropHandler="{Binding DropHandler}"
                             dd:DragDrop.IsDragSource="True"
                             dd:DragDrop.IsDropTarget="True"

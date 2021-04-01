@@ -19,7 +19,8 @@ namespace Kzrnm.WindowCapture.ViewModels
         {
             this.ImageProvider = imageProvider;
             this.clipboard = clipboardManager;
-            this.DropHandler = new ImageDropTarget(imageProvider);
+            this.DropHandler = new(imageProvider);
+            this.DragHandler = new();
             IsActive = true;
         }
 
@@ -55,6 +56,7 @@ namespace Kzrnm.WindowCapture.ViewModels
                 this.clipboard.SetImage(image.TransformedImage);
         }
 
-        public IDropTarget DropHandler { get; }
+        public ImageDropTarget DropHandler { get; }
+        public ImageDragSource DragHandler { get; }
     }
 }

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:CapApp.ViewModels"
     xmlns:wc="https://github.com/naminodarie/WindowCapture"
+    Title="WindowCapture.App"
     Width="600"
     Height="200"
     MinWidth="360"
