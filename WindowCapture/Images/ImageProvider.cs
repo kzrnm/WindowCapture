@@ -14,10 +14,10 @@ namespace Kzrnm.WindowCapture.Images
         {
             this.captureImageService = captureImageService;
             this._Images = images;
-            images.SelectedIndexChanged += (_, _) =>
+            images.SelectedIndexChanged += (_, e) =>
             {
-                SelectedImageIndex = this._Images.SelectedIndex;
-                SelectedImage = this._Images.SelectedItem;
+                SelectedImageIndex = e.NewIndex;
+                SelectedImage = e.NewItem;
             };
             Messenger.Register(this);
         }

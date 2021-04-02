@@ -11,8 +11,12 @@ namespace Kzrnm.WindowCapture.Mvvm
         {
             set
             {
+                var e = new SelectedIndexChangedEventArgs(
+                    _SelectedIndex, value,
+                    (uint)_SelectedIndex < (uint)this.Count ? this[_SelectedIndex] : default,
+                    (uint)value < (uint)this.Count ? this[value] : default);
                 _SelectedIndex = value;
-                SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
+                SelectedIndexChanged?.Invoke(this, e);
             }
             get => _SelectedIndex;
         }
@@ -20,7 +24,7 @@ namespace Kzrnm.WindowCapture.Mvvm
         [MaybeNull]
         public T SelectedItem => SelectedIndex < 0 ? default : this[SelectedIndex];
 
-        public event EventHandler? SelectedIndexChanged;
+        public event EventHandler<SelectedIndexChangedEventArgs>? SelectedIndexChanged;
 
         protected override void InsertItem(int index, T item)
         {
@@ -61,8 +65,15 @@ namespace Kzrnm.WindowCapture.Mvvm
         }
         protected override void SetItem(int index, T item)
         {
+            SelectedIndexChangedEventArgs? e = null;
+            if (index == _SelectedIndex)
+            {
+                var oldValue = (uint)_SelectedIndex < (uint)this.Count ? this[_SelectedIndex] : default;
+                e = new SelectedIndexChangedEventArgs(_SelectedIndex, _SelectedIndex, oldValue, item);
+            }
             base.SetItem(index, item);
-            SelectedIndexChanged?.Invoke(this, EventArgs.Empty);
+            if (e is not null)
+                SelectedIndexChanged?.Invoke(this, e);
         }
 
         public void RemoveSelectedItem()
@@ -70,6 +81,21 @@ namespace Kzrnm.WindowCapture.Mvvm
             var ix = SelectedIndex;
             if ((uint)ix < (uint)Count)
                 this.RemoveAt(ix);
+        }
+
+        public class SelectedIndexChangedEventArgs : EventArgs
+        {
+            public int OldIndex { get; }
+            public int NewIndex { get; }
+            public T? OldItem { get; }
+            public T? NewItem { get; }
+            public SelectedIndexChangedEventArgs(int oldIndex, int newIndex, T? oldItem, T? newItem)
+            {
+                this.OldIndex = oldIndex;
+                this.NewIndex = newIndex;
+                this.OldItem = oldItem;
+                this.NewItem = newItem;
+            }
         }
     }
 }
