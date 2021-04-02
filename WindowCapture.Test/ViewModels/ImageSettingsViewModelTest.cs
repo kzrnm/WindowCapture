@@ -15,7 +15,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public ImageSettingsViewModelTest()
         {
             Messenger = new();
-            ImageProvider = new ImageProvider(Messenger);
+            ImageProvider = new ImageProvider(Messenger, new CaptureImageService());
         }
 
         [Fact]

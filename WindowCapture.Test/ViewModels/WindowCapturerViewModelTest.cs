@@ -16,13 +16,13 @@ namespace Kzrnm.WindowCapture.ViewModels
         public WindowCapturerViewModelTest()
         {
             Messenger = new();
-            ImageProvider = new ImageProvider(Messenger);
+            ImageProvider = new ImageProvider(Messenger, new CaptureImageService());
         }
 
         [Fact]
         public void ImageVisibility()
         {
-            var viewModel = new WindowCapturerViewModel(Messenger, ImageProvider);
+            var viewModel = new WindowCapturerViewModel(Messenger, new CaptureImageService(), ImageProvider);
             using (var ph = new PropertyChangedHistory(viewModel))
             {
                 ph.Should().Equal(new Dictionary<string, int> { });

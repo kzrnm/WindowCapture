@@ -17,8 +17,8 @@ namespace Kzrnm.WindowCapture.ViewModels
 
         public ImagePreviewWindowViewModelTest()
         {
-            Messenger = new ();
-            ImageProvider = new ImageProvider(Messenger);
+            Messenger = new();
+            ImageProvider = new ImageProvider(Messenger, new CaptureImageService());
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace Kzrnm.WindowCapture.ViewModels
             var img = ImageProvider.Images[0];
             img.ImageRatioSize.WidthPercentage = 200;
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImagePreviewWindowViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImagePreviewWindowViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
 
             BitmapSource called = null;
             clipboardMock.Setup(c => c.SetImage(It.IsAny<BitmapSource>())).Callback<BitmapSource>(img => called = img);
@@ -43,7 +43,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         {
             var img = TestUtil.DummyBitmapSource(10, 10);
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImagePreviewWindowViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImagePreviewWindowViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
 
             viewModel.PasteImageFromClipboardCommand.CanExecute(null).Should().BeFalse();
             viewModel.PasteImageFromClipboardCommand.Execute(null);
@@ -62,7 +62,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void SelectedImage()
         {
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImagePreviewWindowViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImagePreviewWindowViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
 
             using (var ph = new PropertyChangedHistory(viewModel))
             {
@@ -89,7 +89,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void Visibility()
         {
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImagePreviewWindowViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImagePreviewWindowViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
 
             using (var ph = new PropertyChangedHistory(viewModel))
             {
@@ -116,7 +116,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void ClearImageCommand()
         {
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImagePreviewWindowViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImagePreviewWindowViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
             ImageProvider.AddImage(TestUtil.DummyBitmapSource(4, 4));
             viewModel.ClearImageCommand.Execute(null);
             ImageProvider.Images.Should().BeEmpty();

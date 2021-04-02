@@ -9,10 +9,12 @@ namespace Kzrnm.WindowCapture.Images
     public class ImageDropTarget : DefaultDropHandler
     {
         private readonly ImageProvider imageProvider;
+        private readonly ICaptureImageService captureImageService;
         public bool AllowOtherDrop { get; }
-        public ImageDropTarget(ImageProvider imageProvider) : this(imageProvider, false) { }
-        public ImageDropTarget(ImageProvider imageProvider, bool allowOtherDrop)
+        public ImageDropTarget(ICaptureImageService captureImageService, ImageProvider imageProvider) : this(captureImageService, imageProvider, false) { }
+        public ImageDropTarget(ICaptureImageService captureImageService, ImageProvider imageProvider, bool allowOtherDrop)
         {
+            this.captureImageService = captureImageService;
             this.imageProvider = imageProvider;
             this.AllowOtherDrop = allowOtherDrop;
         }
@@ -26,7 +28,7 @@ namespace Kzrnm.WindowCapture.Images
             else if (dropInfo.Data is DataObject data)
             {
                 if (data.GetData(DataFormats.FileDrop, false) is string[] files
-                    && files.All(f => CaptureImageUtils.IsImageFile(f))
+                    && files.All(f => captureImageService.IsImageFile(f))
                     || data.ContainsImage())
                 {
                     dropInfo.Effects = DragDropEffects.Copy;

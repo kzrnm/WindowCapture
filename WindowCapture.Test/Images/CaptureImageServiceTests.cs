@@ -3,9 +3,8 @@ using Xunit;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public class CaptureImageUtilsTests
+    public class CaptureImageServiceTests
     {
-
         public static TheoryData IsMatchTest_Data = new TheoryData<bool, string>
         {
            {true, "hoge.jpeg" },
@@ -23,7 +22,7 @@ namespace Kzrnm.WindowCapture.Images
         [MemberData(nameof(IsMatchTest_Data))]
         public void IsMatchTest(bool expected, string name)
         {
-            CaptureImageUtils.IsImageFile(name).Should().Be(expected);
+            new CaptureImageService().IsImageFile(name).Should().Be(expected);
         }
     }
 }

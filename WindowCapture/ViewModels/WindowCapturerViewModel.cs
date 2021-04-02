@@ -9,13 +9,13 @@ namespace Kzrnm.WindowCapture.ViewModels
     public class WindowCapturerViewModel : ObservableRecipient, IRecipient<SelectedImageChangedMessage>
     {
         public ImageProvider ImageProvider { get; }
-        public WindowCapturerViewModel(ImageProvider imageProvider)
-            : this(WeakReferenceMessenger.Default, imageProvider)
+        public WindowCapturerViewModel(ICaptureImageService captureImageService, ImageProvider imageProvider)
+            : this(WeakReferenceMessenger.Default, captureImageService, imageProvider)
         { }
-        public WindowCapturerViewModel(IMessenger messenger, ImageProvider imageProvider)
+        public WindowCapturerViewModel(IMessenger messenger, ICaptureImageService captureImageService, ImageProvider imageProvider)
             : base(messenger)
         {
-            this.DropHandler = new ImageDropTarget(imageProvider, true);
+            this.DropHandler = new ImageDropTarget(captureImageService, imageProvider, true);
             this.ImageProvider = imageProvider;
             IsActive = true;
         }

@@ -10,8 +10,9 @@ namespace Kzrnm.WindowCapture.DependencyInjection
     public class ServiceBuilder : IServiceCollection
     {
         private ServiceBuilder() {
-            services.AddSingleton<ImageProvider>();
             services.AddSingleton<IClipboardManager, ClipboardManager>();
+            services.AddSingleton<ICaptureImageService, CaptureImageService>();
+            services.AddSingleton<ImageProvider>();
             
             services.AddTransient<WindowCapturerViewModel>();
             services.AddTransient<ImageListViewModel>();

@@ -7,12 +7,12 @@ namespace Kzrnm.WindowCapture.Images
 {
     public class ImageProvider : ObservableRecipient, IRecipient<WindowClosingMessage>
     {
-        public ImageProvider()
-            : this(WeakReferenceMessenger.Default, new SelectorObservableCollection<CaptureImage>()) { }
-        public ImageProvider(IMessenger messenger) : this(messenger, new SelectorObservableCollection<CaptureImage>()) { }
-        protected ImageProvider(IMessenger messenger, SelectorObservableCollection<CaptureImage> images)
+        public ImageProvider(ICaptureImageService captureImageService) : this(WeakReferenceMessenger.Default, captureImageService, new SelectorObservableCollection<CaptureImage>()) { }
+        public ImageProvider(IMessenger messenger, ICaptureImageService captureImageService) : this(messenger, captureImageService, new SelectorObservableCollection<CaptureImage>()) { }
+        protected ImageProvider(IMessenger messenger, ICaptureImageService captureImageService, SelectorObservableCollection<CaptureImage> images)
             : base(messenger)
         {
+            this.captureImageService = captureImageService;
             this._Images = images;
             images.SelectedIndexChanged += (_, _) =>
             {
@@ -27,6 +27,7 @@ namespace Kzrnm.WindowCapture.Images
             _Images.Clear();
         }
 
+        private readonly ICaptureImageService captureImageService;
         protected readonly SelectorObservableCollection<CaptureImage> _Images;
         public SelectorObservableCollection<CaptureImage> Images => this._Images;
 
@@ -91,7 +92,7 @@ namespace Kzrnm.WindowCapture.Images
         public bool TryAddImageFromFile(string filePath)
         {
             if (!CanAddImage) return false;
-            var image = CaptureImageUtils.GetImageFromFile(filePath);
+            var image = captureImageService.GetImageFromFile(filePath);
             if (image == null) return false;
             ApplyLastOption(image);
             this.Images.Add(image);
@@ -108,7 +109,7 @@ namespace Kzrnm.WindowCapture.Images
         public bool TryInsertImageFromFile(int index, string filePath)
         {
             if (!CanAddImage) return false;
-            var image = CaptureImageUtils.GetImageFromFile(filePath);
+            var image = captureImageService.GetImageFromFile(filePath);
             if (image == null) return false;
             ApplyLastOption(image);
             this.Images.Insert(index, image);

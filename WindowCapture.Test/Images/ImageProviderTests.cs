@@ -18,7 +18,7 @@ namespace Kzrnm.WindowCapture.Images
         public ImageProviderTests()
         {
             Messenger = new();
-            ImageProvider = new ImageProvider(Messenger);
+            ImageProvider = new ImageProvider(Messenger, new CaptureImageService());
             Messenger.Register(this);
         }
 

@@ -17,14 +17,14 @@ namespace Kzrnm.WindowCapture.ViewModels
         public ImageListViewModelTest()
         {
             Messenger = new();
-            ImageProvider = new ImageProvider(Messenger);
+            ImageProvider = new ImageProvider(Messenger, new CaptureImageService());
         }
 
         [Fact]
         public void RemoveSelectedImageCommand()
         {
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImageListViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
 
             viewModel.RemoveSelectedImageCommand.CanExecute(null).Should().BeFalse();
 
@@ -40,7 +40,7 @@ namespace Kzrnm.WindowCapture.ViewModels
         public void InsertImageFromClipboardCommand()
         {
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImageListViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
             viewModel.InsertImageFromClipboardCommand.CanExecute(null).Should().BeFalse();
 
             viewModel.InsertImageFromClipboardCommand.CanExecute(null).Should().BeFalse();
@@ -74,7 +74,7 @@ namespace Kzrnm.WindowCapture.ViewModels
             var img = ImageProvider.Images[0];
             img.ImageRatioSize.WidthPercentage = 200;
             var clipboardMock = new Mock<IClipboardManager>();
-            var viewModel = new ImageListViewModel(Messenger, clipboardMock.Object, ImageProvider);
+            var viewModel = new ImageListViewModel(Messenger, new CaptureImageService(), clipboardMock.Object, ImageProvider);
 
             BitmapSource called = null;
             clipboardMock.Setup(c => c.SetImage(It.IsAny<BitmapSource>())).Callback<BitmapSource>(img => called = img);

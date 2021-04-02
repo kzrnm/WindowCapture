@@ -11,15 +11,15 @@ namespace Kzrnm.WindowCapture.ViewModels
     {
         private readonly IClipboardManager clipboard;
         public ImageProvider ImageProvider { get; }
-        public ImageListViewModel(IClipboardManager clipboardManager, ImageProvider imageProvider)
-            : this(WeakReferenceMessenger.Default, clipboardManager, imageProvider)
+        public ImageListViewModel(ICaptureImageService captureImageService, IClipboardManager clipboardManager, ImageProvider imageProvider)
+            : this(WeakReferenceMessenger.Default, captureImageService, clipboardManager, imageProvider)
         { }
-        public ImageListViewModel(IMessenger messenger, IClipboardManager clipboardManager, ImageProvider imageProvider)
+        public ImageListViewModel(IMessenger messenger, ICaptureImageService captureImageService, IClipboardManager clipboardManager, ImageProvider imageProvider)
             : base(messenger)
         {
             this.ImageProvider = imageProvider;
             this.clipboard = clipboardManager;
-            this.DropHandler = new(imageProvider);
+            this.DropHandler = new(captureImageService, imageProvider);
             this.DragHandler = new();
             IsActive = true;
         }

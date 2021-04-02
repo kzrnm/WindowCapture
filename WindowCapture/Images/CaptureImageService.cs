@@ -6,7 +6,13 @@ using System.Windows.Media.Imaging;
 
 namespace Kzrnm.WindowCapture.Images
 {
-    public static class CaptureImageUtils
+    public interface ICaptureImageService
+    {
+        CaptureImage? GetImageFromFile(string filePath);
+        bool IsImageFile(ReadOnlySpan<char> fileName);
+        bool IsJpegFile(ReadOnlySpan<char> fileName);
+    }
+    public class CaptureImageService : ICaptureImageService
     {
         /// <summary>
         /// ファイルから画像を読み込む
@@ -14,7 +20,7 @@ namespace Kzrnm.WindowCapture.Images
         /// </summary>
         /// <param name="filePath">読み込むファイル</param>
         /// <returns></returns>
-        public static CaptureImage? GetImageFromFile(string filePath)
+        public CaptureImage? GetImageFromFile(string filePath)
         {
             using var ms = new MemoryStream(File.ReadAllBytes(filePath));
             try
@@ -30,7 +36,7 @@ namespace Kzrnm.WindowCapture.Images
         }
         private static readonly Regex fileNamePattern
             = new(@"\.(bmp|jpe?g|png)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        public static bool IsImageFile(ReadOnlySpan<char> fileName)
+        public bool IsImageFile(ReadOnlySpan<char> fileName)
         {
             var ext = Path.GetExtension(fileName);
             if (ext.Length <= 1) return false;
@@ -42,7 +48,7 @@ namespace Kzrnm.WindowCapture.Images
         }
         public static readonly Regex jpegPattern
             = new(@"\.jpe?g", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        public static bool IsJpegFile(ReadOnlySpan<char> fileName)
+        public bool IsJpegFile(ReadOnlySpan<char> fileName)
         {
             var ext = Path.GetExtension(fileName);
             if (ext.Length <= 1) return false;
