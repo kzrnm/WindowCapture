@@ -9,8 +9,8 @@ namespace Kzrnm.WindowCapture.Images
     public interface ICaptureImageService
     {
         CaptureImage? GetImageFromFile(string filePath);
-        bool IsImageFile(ReadOnlySpan<char> fileName);
-        bool IsJpegFile(ReadOnlySpan<char> fileName);
+        bool IsImageFile(string fileName);
+        bool IsJpegFile(string fileName);
     }
     public class CaptureImageService : ICaptureImageService
     {
@@ -36,7 +36,7 @@ namespace Kzrnm.WindowCapture.Images
         }
         private static readonly Regex fileNamePattern
             = new(@"\.(bmp|jpe?g|png)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        public bool IsImageFile(ReadOnlySpan<char> fileName)
+        public bool IsImageFile(string fileName)
         {
             var ext = Path.GetExtension(fileName);
             if (ext.Length <= 1) return false;
@@ -48,7 +48,7 @@ namespace Kzrnm.WindowCapture.Images
         }
         public static readonly Regex jpegPattern
             = new(@"\.jpe?g", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        public bool IsJpegFile(ReadOnlySpan<char> fileName)
+        public bool IsJpegFile(string fileName)
         {
             var ext = Path.GetExtension(fileName);
             if (ext.Length <= 1) return false;
